@@ -1,0 +1,371 @@
+TOTAL JOBS : 41
+
+Company: Dover India
+Role: Senior QA Engineer - Test Automation
+Portal: Foundit
+Location: Bengaluru, India
+Posted: Posted 19 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: RingCentral
+Role: Lead Automation QA Engineer
+Portal: Foundit
+Location: Bengaluru, India
+Posted: Posted 20 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: Technoble Consulting Services Private Limited
+Role: Guidewire Automation QA Engineer
+Portal: Foundit
+Location: Hyderabad, Chennai, Bengaluru
+Posted: Posted 6 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: SymphonyAI
+Role: SymphonyAI - Senior QA Engineer - Automation Testing Tools
+Portal: Foundit
+Location: Bengaluru, India
+Posted: Posted 19 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: evnek
+Role: QA Engineer
+Portal: Foundit
+Location: Bengaluru, India
+Posted: Posted 19 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: agt software partners
+Role: QA Engineer
+Portal: Foundit
+Location: Hyderabad, India
+Posted: Posted 19 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: Logic Planet
+Role: Automation QA Engineer
+Portal: Foundit
+Location: Chennai
+Posted: Posted 2 days ago
+Job URL: N/A
+
+----------------------
+
+Company: simple, a netsmart solution
+Role: Senior QA Engineer ( Manual )
+Portal: Foundit
+Location: Bengaluru, India
+Posted: Posted 19 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: Edelman Financial Engines
+Role: Sr. QA Engineer
+Portal: Foundit
+Location: Bengaluru, India
+Posted: Posted 19 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: Marvell Technology - Multimedia Solutions Business
+Role: Staff/ Senior Staff QA Engineer (C. C++, Python, CXL, PCIE)
+Portal: Foundit
+Location: Hyderabad, India
+Posted: Posted 18 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: talentgigs
+Role: Manual QA Engineer - RCM(U.S Healthcare)
+Portal: Foundit
+Location: Chennai, India
+Posted: Posted 20 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: Outreach
+Role: Senior QA Engineer
+Portal: Foundit
+Location: Hyderabad, India
+Posted: Posted 19 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: Evolving Systems
+Role: Manual QA Engineer (Frontline Feature & Support Testing)
+Portal: Foundit
+Location: Bengaluru, India
+Posted: Posted 19 hours ago
+Job URL: N/A
+
+----------------------
+
+Company: ciklum india
+Role: Senior Automation QA Engineer
+Portal: Foundit
+Location: Chennai, India
+Posted: Posted 2 days ago
+Job URL: N/A
+
+----------------------
+
+Company: ClanX
+Role: QA Automation Engineer - Mumbai
+Portal: Indeed
+Location: Hybrid work in Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=a7fbb83733815887&bb=1y8uv7EMOc94QvaeU7WBDIs7__J1hQ-ctEQuQRVui4RCmbMis_slnm_KtNqriqQtS-f7UPgnSMzesuSvVTn-C8ObnBN0d2uxgNkAtdYAiLXq4cjVclgd0_9wwbPrg2y_7gwNV9svsIc-WHNuVS6YRAQDfSl4K2Z53DwX8CDtenGnGi2EQkxphw%3D%3D&xkcb=SoDG67M3jqoVIhzBCZ0LbzkdCdPP&fccid=f1020d68f89e2355&vjs=3
+
+----------------------
+
+Company: Travelex
+Role: QA Automation Engineer
+Portal: Indeed
+Location: Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=1f0f6dd7a2fb22ea&bb=1y8uv7EMOc94QvaeU7WBDM4mdvZGRS4tpugU1FUHxSJ_Rq-GP9RdU-PGB-VGlvKf-Yipian5tfJ2G0SZ0_3mkTKZ-_QWXlyYOszcxs2ASAbvL3caNGut6IyYx12TkINwzYsz0iZ7YvbdbAArCrviLMyDYPaalm7SHKtb1iOZAKZQiNbJfqmQPQ%3D%3D&xkcb=SoBy67M3jqoVIhzBCZ0KbzkdCdPP&fccid=7fb3a97cd6e79b0f&vjs=3
+
+----------------------
+
+Company: GreyBath Technology PVT LTD
+Role: QA Engineer
+Portal: Indeed
+Location: Andheri West, Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=4d11621aa228d2ee&bb=1y8uv7EMOc94QvaeU7WBDL8Y5XLxYdFD_h1x6CjQ-POAyjBKcmRUY201MhzTjwM4jLkYK4QLrMXyx_H4KaC5Biruukefe6lnvmnjXiMOp-qyoJTe0J9WHDCVNdU4IiBkD1gEBMjS9WhJRsjXltypV3dO8dNwpvDPSaNWAGrKeE8OtU5ZL5CuTg%3D%3D&xkcb=SoDv67M3jqoVIhzBCZ0JbzkdCdPP&fccid=de8c27c5eba131aa&cmp=GreyBath-Technology-PVT-LTD&ti=Quality+Assurance+Engineer&vjs=3
+
+----------------------
+
+Company: MyBeacon Services Inc
+Role: QA Engineer (India - Remote)
+Portal: Indeed
+Location: Remote in Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=e9c359ee021a1f7d&bb=1y8uv7EMOc94QvaeU7WBDAsHTVJmSxxokF8n08SNB2mJORq-EzueCLbOL_3mvg-qaKcERZ5aMZL_cCG37n0Xh_MoDF_d6UIb137DgZlgXH4bzsp9IVmgbluoF4MTYMm2BRgJo96xofwYoP2TZz6hZUUpFjZKcUDFuRSQk3aTSDEUgHSfJmE5AQ%3D%3D&xkcb=SoBb67M3jqoVIhzBCZ0IbzkdCdPP&fccid=5a418e06ffd24edc&vjs=3
+
+----------------------
+
+Company: DIMA Engineering
+Role: QA Engineer (0-3 Years)
+Portal: Indeed
+Location: Goregaon, Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=b37eeda21bf1b9c4&bb=1y8uv7EMOc94QvaeU7WBDL8Y5XLxYdFDLJoZRT7B07wrZckIMOAqZSGleOzJIR9zkcf4KYxUEAgBYKA7mM3H1Vo40mYulUoYpYSkq-3etwKgwp8kCcj2mBHZu_j-IHW1Ep3w2vMu81sy-t_5ReSBiUyXWqjJOA7nus-zP8Va8djTbD6uFMG2Og%3D%3D&xkcb=SoDV67M3jqoVIhzBCZ0PbzkdCdPP&fccid=2e4fd250146f0ae4&cmp=DIMA-Engineering&ti=Quality+Assurance+Engineer&vjs=3
+
+----------------------
+
+Company: multiple company
+Role: QA Automation Engineer with perfromace
+Portal: Indeed
+Location: Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=fd7c916ed719c9b6&bb=1y8uv7EMOc94QvaeU7WBDHgRGBX81oxfxPk6kQggyOgZdCSr24HJwsl1phZTAMLqsiZpfS7B30ueJ8W2uEHiiWg6jqgGJuklH9E6laB79RcU99zdMPpI3LkuvRshkLkqTPG4UIVXoWS-xVK-DGexNgz3hnUttOb4nCRDx0lT8zhpXQIFB2Xxag%3D%3D&xkcb=SoBh67M3jqoVIhzBCZ0ObzkdCdPP&fccid=afc9f21cc578933e&cmp=multiple-company&ti=Automation+Engineer&vjs=3
+
+----------------------
+
+Company: iRageCapital Advisory Private Limited
+Role: QA (Automation) Engineer
+Portal: Indeed
+Location: Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=74d50f9b53d7dbe2&bb=1y8uv7EMOc94QvaeU7WBDJvNxEUJ9uqtUAunzdQ6Jr_52SX90UuaQoMz9hVNKSb0k-kZO1JuWUuaQD7WQvKf3CuksWNWUA38Y6mOnB8iw_YsfV6wtvwFdcbZxUrFKcmBUFu2A1UlJRSEsThU62f63i8B6TqNklAOdfh2nrbb8vnVK81jvW3waQ%3D%3D&xkcb=SoD867M3jqoVIhzBCZ0NbzkdCdPP&fccid=7cacbf1ea47ee251&vjs=3
+
+----------------------
+
+Company: Meta Materials Circular Markets
+Role: Sr. QA Automation Engineer
+Portal: Indeed
+Location: Andheri, Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=36ed3631286bf5b5&bb=1y8uv7EMOc94QvaeU7WBDEmp8P-mOsV_9sMS3us0XB7LvrXRbAVoTxt9Fvd_HPzBQEpaD678gEUaA7cIxa3cR--yHZ9_ubiLVI-3P0EjhrrnNqj29UHXhwVXdmJHNZHV7FUf5mbJlUeUhW-UqBktyVWNUvlWWUFrJBUxEDzVW2FFGEUEgoE9sw%3D%3D&xkcb=SoBI67M3jqoVIhzBCZ0MbzkdCdPP&fccid=64cd4ce4d76817ce&cmp=Meta-Materials-Circular-Markets&ti=Senior+Automation+Engineer&vjs=3
+
+----------------------
+
+Company: NetReach Software Pvt Ltd
+Role: QA Software Application Tester (Manual Testing)
+Portal: Indeed
+Location: Mumbai Suburban District, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=8e2739edf44b0de7&bb=1y8uv7EMOc94QvaeU7WBDEH6SFxXMP6eja5z4-oo2RtTMhQfYO8TZeMTYGb3q5arN3JAU53U2HdoJAPpNeZKpv7L5WrNFYjALfmAyQ9fCgW14ZrWwfUiCSVnIcHMueShQB97C_ECd4Ly3E3qje91uDXVTGpdICey5bCj6Vd5tPKkxnin5rsaAw%3D%3D&xkcb=SoCh67M3jqoVIhzBCZ0DbzkdCdPP&fccid=e6230b15b9bdcf91&cmp=NetReach-Software-Pvt-Ltd&ti=Software+Quality+Assurance+Tester&vjs=3
+
+----------------------
+
+Company: Institutional Shareholder Services
+Role: QA Engineer – Manual Testing (Automation Exposure)
+Portal: Indeed
+Location: Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=7ab54d8afec51d59&bb=1y8uv7EMOc94QvaeU7WBDGllQ2wdelu5peJxFX7Ca5jnDI3Maxan7tMjArRE_MJHrtB3BC1D2EZCX_RHLaK4p53_KsJjmdwVHuwSxyXNn0U42ssH6txP1Tmw_AMu9pqql9mCpj-s1CGVNjqirP7Z7QSV2oZJFivOeS0PqTwap7HXnCHDF3q0FQ%3D%3D&xkcb=SoAV67M3jqoVIhzBCZ0CbzkdCdPP&fccid=c15e58c229888ed7&vjs=3
+
+----------------------
+
+Company: Decisions
+Role: Junior QA Automation Engineer
+Portal: Indeed
+Location: Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=c0a84c4f1abae046&bb=1y8uv7EMOc94QvaeU7WBDD3Y1GXTk3LPeJOR3DPWYW0_CZ11rqajTdQs5N5aulQSed1G7ivk5FrkZ9Vy6HAb3CPf1AvOu3fd_neoi4Eyx8rvh2LgQp0klb5Iowff60-gjLW-ebGP-Hxk9YcgJdKi9Dbzyb6cADjQgCCRA_a_skATdwcxdIV3Ig%3D%3D&xkcb=SoCI67M3jqoVIhzBCZ0BbzkdCdPP&fccid=41650ce8b9974b5c&vjs=3
+
+----------------------
+
+Company: BairesDev
+Role: DevOps Engineer - Remote Work
+Portal: Indeed
+Location: Remote in Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=d0efcf815910e89f&bb=1y8uv7EMOc94QvaeU7WBDAUu4t_zuWIxoxDXa01M0UEhBua-4TiqSaItewvDJtkxEoLCrNwPhPeUMMILH9LkqyVmV-rox9GZKkgVxQGtQj6swO1n7gcrsoy8iYkZIwJT2BLJsWO2StHO9nWJEnXHCo38eFRHT3K9gyqbhcIlUEUA6IS8490TZg%3D%3D&xkcb=SoA867M3jqoVIhzBCZ0AbzkdCdPP&fccid=29707109e86166e5&vjs=3
+
+----------------------
+
+Company: Tech Turmeric IT Services
+Role: Automation Tester(1-4 yrs)
+Portal: Indeed
+Location: Malad, Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=703323e739123537&bb=1y8uv7EMOc94QvaeU7WBDLtosvm_yQjGFF5yO2jSN9kCJ16YMx-dAEPZPfSJt3MVI_9Ite9RkUOst46arHtez3Wr80rhWdkqQP7Sw1n9ZtY99kFZKCWs4945EbArxP3Mw_HHMAstuKSjcVG9fZKfPQxPQlLFx3dWUHL0eZ4mP3s1GePcCOk0_w%3D%3D&xkcb=SoCy67M3jqoVIhzBCZ0HbzkdCdPP&fccid=9be0139521daa98f&cmp=Tech-Turmeric-IT-Services&ti=Automation+Engineer&vjs=3
+
+----------------------
+
+Company: TalentWell Solutions
+Role: QA Engineer
+Portal: Indeed
+Location: Remote in Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=67224e06225f8032&bb=1y8uv7EMOc94QvaeU7WBDDyR3StIHdzobaXZyBOsw2lyd9HB2m9D6G-6vdleuQK8m7QU3Z6o0kp8FUYVwPFYUORASkZBUhhU51mslHh618HTiTeRPb6aSl0v0Ype0pmZEp2aDQAhXykQOy9oiK7jdvfNsIR-BOnCUG-pSkmWNIwayMZTadZYow%3D%3D&xkcb=SoAG67M3jqoVIhzBCZ0GbzkdCdPP&fccid=aeddd88a48796a22&vjs=3
+
+----------------------
+
+Company: Go Digital Technology Consulting
+Role: Senior QA Automation Engineer (Application Testing)
+Portal: Indeed
+Location: Lower Parel, Mumbai, Maharashtra
+Posted: N/A
+Job URL: /rc/clk?jk=363ba8238fc9373d&bb=1y8uv7EMOc94QvaeU7WBDAexIzBVBwaDUxzRe3eiHnjMPqyZUPty2LvDaTc6fzZ2eu3qnybfmxIbpM1miUNuu0lqqNLGSQtOBb8KXDnSX5Gl_GQLkS9kLG1ZZ4nkP-4kSN-nC1fDelVL9wNMIy3t9GbDhPJvHtoj5Nuv0NXFw2KAbEMo2dwZAA%3D%3D&xkcb=SoCb67M3jqoVIhzBCZ0FbzkdCdPP&fccid=f13498f5613da174&vjs=3
+
+----------------------
+
+Company: Purplle.com
+Role: QA Automation Engineer - QA 2
+Portal: LinkedIn
+Location: Mumbai Metropolitan Region
+Posted: 23 hours ago
+Job URL: https://in.linkedin.com/jobs/view/qa-automation-engineer-qa-2-at-purplle-com-4409136819?position=2&pageNum=0&refId=LDnINPJpAPNfGzFHQlQMmA%3D%3D&trackingId=ZAonQhO4lFlyDdofb89VJQ%3D%3D
+
+----------------------
+
+Company: TÜV SÜD
+Role: QA Engineer
+Portal: LinkedIn
+Location: Mumbai Metropolitan Region
+Posted: 1 week ago
+Job URL: https://in.linkedin.com/jobs/view/qa-engineer-at-t%C3%BCv-s%C3%BCd-4382581603?position=7&pageNum=0&refId=LDnINPJpAPNfGzFHQlQMmA%3D%3D&trackingId=tX2Q0wkROs1nKvRFL6IEWQ%3D%3D
+
+----------------------
+
+Company: Stack Wealth
+Role: QA Automation Engineer (4-5 years)
+Portal: LinkedIn
+Location: Mumbai, Maharashtra, India
+Posted: 1 week ago
+Job URL: https://in.linkedin.com/jobs/view/qa-automation-engineer-4-5-years-at-stack-wealth-4410139201?position=9&pageNum=0&refId=LDnINPJpAPNfGzFHQlQMmA%3D%3D&trackingId=24RqokVIzxRnfw4yE26J2g%3D%3D
+
+----------------------
+
+Company: RXO, Inc.
+Role: Engineer II, Quality Assurance
+Portal: LinkedIn
+Location: Mumbai Metropolitan Region
+Posted: 1 day ago
+Job URL: https://in.linkedin.com/jobs/view/engineer-ii-quality-assurance-at-rxo-inc-4416571614?position=10&pageNum=0&refId=LDnINPJpAPNfGzFHQlQMmA%3D%3D&trackingId=iyISfM%2BE0hS8IZTwV2dHOA%3D%3D
+
+----------------------
+
+Company: BNP Paribas
+Role: Assistant Manager- Automation Engineer
+Portal: LinkedIn
+Location: Mumbai, Maharashtra, India
+Posted: 1 week ago
+Job URL: https://in.linkedin.com/jobs/view/assistant-manager-automation-engineer-at-bnp-paribas-4415369226?position=11&pageNum=0&refId=LDnINPJpAPNfGzFHQlQMmA%3D%3D&trackingId=5%2BDNOByx9xiUnUTPoT54Kw%3D%3D
+
+----------------------
+
+Company: Miko
+Role: Senior Quality Assurance Engineer
+Portal: LinkedIn
+Location: Mumbai Metropolitan Region
+Posted: 2 days ago
+Job URL: https://in.linkedin.com/jobs/view/senior-quality-assurance-engineer-at-miko-4416540712?position=12&pageNum=0&refId=LDnINPJpAPNfGzFHQlQMmA%3D%3D&trackingId=mpildaE0aVZ0g8vylTDDTQ%3D%3D
+
+----------------------
+
+Company: Go Digital Technology Consulting LLP
+Role: Senior QA Automation Engineer (Application Testing)
+Portal: LinkedIn
+Location: Mumbai, Maharashtra, India
+Posted: 1 week ago
+Job URL: https://in.linkedin.com/jobs/view/senior-qa-automation-engineer-application-testing-at-go-digital-technology-consulting-llp-4413296328?position=15&pageNum=0&refId=LDnINPJpAPNfGzFHQlQMmA%3D%3D&trackingId=H6KNH3X%2FoUQ3CrxCKuvsdQ%3D%3D
+
+----------------------
+
+Company: RXO, Inc.
+Role: Senior Engineer, Quality Assurance
+Portal: LinkedIn
+Location: Mumbai Metropolitan Region
+Posted: 1 week ago
+Job URL: https://in.linkedin.com/jobs/view/senior-engineer-quality-assurance-at-rxo-inc-4413588383?position=16&pageNum=0&refId=LDnINPJpAPNfGzFHQlQMmA%3D%3D&trackingId=ls1%2FqxqOFNWshKNjmkBLZA%3D%3D
+
+----------------------
+
+Company: Clearwater Analytics
+Role: Software Development Engineer in Test
+Portal: LinkedIn
+Location: Mumbai Metropolitan Region
+Posted: 1 week ago
+Job URL: https://in.linkedin.com/jobs/view/software-development-engineer-in-test-at-clearwater-analytics-4414745670?position=18&pageNum=0&refId=LDnINPJpAPNfGzFHQlQMmA%3D%3D&trackingId=j%2FrZJFyVbuCZov6Of4RKgA%3D%3D
+
+----------------------
+
+Company: Luxoft
+Role: Automation QA Engineer / SDET
+Portal: Naukri
+Location: Mumbai, Pune, Chennai
+Posted: 1 day ago
+Job URL: https://www.naukri.com/job-listings-automation-qa-engineer-sdet-luxoft-india-llp-mumbai-pune-chennai-3-to-7-years-220526929568
+
+----------------------
+
+Company: Planit Testing India
+Role: Engineer Level 2-Quality Engineering
+Portal: Naukri
+Location: Mumbai
+Posted: 2 days ago
+Job URL: https://www.naukri.com/job-listings-engineer-level-2-quality-engineering-planit-mumbai-2-to-3-years-210526500701
+
+----------------------
+
+Company: LTIMindtree Limited
+Role: SF QA with SFMC
+Portal: Shine
+Location: Mumbai City, Pune
+Posted: posted 1 week ago
+Job URL: https://www.shine.com/jobs/sf-qa-with-sfmc/ltimindtree-limited/19074088
+
+----------------------
+

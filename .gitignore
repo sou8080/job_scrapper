@@ -1,0 +1,58 @@
+# ==========================================
+# Maven Build Outputs
+# ==========================================
+target/
+*.releaseBackup
+
+# ==========================================
+# IDE / Project Files
+# ==========================================
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# ==========================================
+# Logs / Reports / Test Outputs
+# ==========================================
+logs/
+reports/
+test-output/
+playwright-report/
+test-results/
+.playwright-downloads/
+
+# ==========================================
+# Session / Auth Persistence
+# ==========================================
+auth/*.json
+sessions/
+storage/
+
+# ==========================================
+# Scraped Output Files
+# ==========================================
+output/jobs.txt
+output/jobs.csv
+
+# Optional: Ignore all output files
+# output/
+
+# ==========================================
+# Environment / Secrets
+# ==========================================
+.env
+*.env
+
+# ==========================================
+# Java / Maven
+# ==========================================
+*.class
+
+# ==========================================
+# OS Generated Files
+# ==========================================
+.DS_Store
+Thumbs.db

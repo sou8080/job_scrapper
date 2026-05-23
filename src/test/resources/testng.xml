@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Job Bot Suite" parallel="methods" thread-count="4">
+
+  <test name="Job Search Tests">
+
+    <groups>
+      <run>
+        <include name="jobs" />
+      </run>
+    </groups>
+
+    <classes>
+      <class name="testcases.Job_Search_Test" />
+    </classes>
+
+  </test>
+
+</suite>
