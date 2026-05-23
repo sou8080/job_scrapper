@@ -2,31 +2,25 @@ package config;
 
 public class FrameworkConfig {
 
-    // ==========================================
-    // BROWSER
-    // ==========================================
+        // ==========================================
+        // BROWSER
+        // ==========================================
 
-    public static final String BROWSER = ConfigLoader.get(
-            "browser");
+        public static final String BROWSER = ConfigLoader.get(
+                        "browser");
 
-    // ==========================================
-    // HEADLESS
-    // ==========================================
+        // ==========================================
+        // HEADLESS
+        // ==========================================
 
-    public static final boolean HEADLESS = ConfigLoader.getBoolean(
-            "headless");
+        public static final boolean HEADLESS = ConfigLoader.getBoolean(
+                        "headless");
 
-    // ==========================================
-    // SESSION TTL
-    // ==========================================
+        // ==========================================
+        // TELEGRAM
+        // ==========================================
 
-    public static final int SESSION_TTL_HOURS = ConfigLoader.getInt(
-            "session_ttl_hours");
+        public static final String TELEGRAM_BOT_TOKEN = ConfigLoader.get("telegram_bot_token");
+        public static final String TELEGRAM_CHAT_ID = ConfigLoader.get("telegram_chat_id");
 
-    // ==========================================
-    // PARALLEL THREADS
-    // ==========================================
-
-    public static final int THREAD_COUNT = ConfigLoader.getInt(
-            "thread_count");
 }

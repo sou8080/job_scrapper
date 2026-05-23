@@ -9,7 +9,6 @@ import factory.PortalScrapeConfigFactory;
 import models.PortalScrapeConfig;
 
 import org.testng.Assert;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
 import pom.Foundit_POM;
@@ -20,9 +19,9 @@ import pom.Shine_POM;
 
 import services.CommonJobScraperService;
 import services.JobCollectorService;
-import services.JobFileStoreService;
 
 import utilities.JobPortal;
+import utilities.TelegramNotifier;
 
 @Test(singleThreaded = true)
 public class Job_Search_Test extends Test_Base_Class {
@@ -38,40 +37,84 @@ public class Job_Search_Test extends Test_Base_Class {
         })
         public void linkedInJobSearchTest() {
 
-                LinkedIn_POM linkedIn = new LinkedIn_POM(page);
+                try {
 
-                PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
-                                JobPortal.LINKEDIN);
+                        TelegramNotifier.sendMessage(
+                                        "🌐 Opening LinkedIn");
 
-                linkedIn.goToLinkedIn();
+                        LinkedIn_POM linkedIn = new LinkedIn_POM(page);
 
-                linkedIn.searchJobs(
-                                SearchConfig.OR_BASED_KEYWORDS,
-                                SearchConfig.LOCATION);
+                        PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
+                                        JobPortal.LINKEDIN);
 
-                Assert.assertTrue(
-                                linkedIn.hasResults(),
-                                "LinkedIn jobs not found.");
+                        linkedIn.goToLinkedIn();
 
-                CommonJobScraperService.scrapeJobs(
-                                page,
-                                "LinkedIn",
+                        TelegramNotifier.sendMessage(
+                                        "🔍 Searching jobs on LinkedIn");
 
-                                config.getJobCardSelector(),
+                        linkedIn.searchJobs(
+                                        SearchConfig.OR_BASED_KEYWORDS,
+                                        SearchConfig.LOCATION);
 
-                                config.getCompanySelector(),
+                        Assert.assertTrue(
+                                        linkedIn.hasResults(),
+                                        "LinkedIn jobs not found.");
 
-                                config.getTitleSelector(),
+                        // ==========================================
+                        // BEFORE COUNT
+                        // ==========================================
 
-                                config.getLocationSelector(),
+                        int beforeCount = JobCollectorService.getTotalJobs();
 
-                                config.getPostedDateSelector(),
+                        // ==========================================
+                        // SCRAPE JOBS
+                        // ==========================================
 
-                                config.getApplyLinkSelector());
+                        CommonJobScraperService.scrapeJobs(
 
-                System.out.println(
-                                "LinkedIn jobs collected : "
-                                                + linkedIn.getJobCount());
+                                        page,
+                                        "LinkedIn",
+
+                                        config.getJobCardSelector(),
+
+                                        config.getCompanySelector(),
+
+                                        config.getTitleSelector(),
+
+                                        config.getLocationSelector(),
+
+                                        config.getPostedDateSelector(),
+
+                                        config.getApplyLinkSelector());
+
+                        // ==========================================
+                        // AFTER COUNT
+                        // ==========================================
+
+                        int afterCount = JobCollectorService.getTotalJobs();
+
+                        // ==========================================
+                        // PORTAL UNIQUE JOB COUNT
+                        // ==========================================
+
+                        int portalStoredJobs = afterCount - beforeCount;
+
+                        TelegramNotifier.sendMessage(
+
+                                        "✅ LinkedIn scraping completed\n"
+                                                        + "📊 Unique Jobs Stored : "
+                                                        + portalStoredJobs);
+
+                } catch (Throwable e) {
+
+                        TelegramNotifier.sendMessage(
+
+                                        "❌ LinkedIn scraping failed\n\n"
+                                                        + "Reason : "
+                                                        + e.getMessage());
+
+                        throw e;
+                }
         }
 
         // ==========================================
@@ -85,40 +128,68 @@ public class Job_Search_Test extends Test_Base_Class {
         })
         public void naukriJobSearchTest() {
 
-                Naukri_POM naukri = new Naukri_POM(page);
+                try {
 
-                PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
-                                JobPortal.NAUKRI);
+                        TelegramNotifier.sendMessage(
+                                        "🌐 Opening Naukri");
 
-                naukri.goToNaukri();
+                        Naukri_POM naukri = new Naukri_POM(page);
 
-                naukri.searchJobs(
-                                SearchConfig.COMMA_SEPARATED_KEYWORDS,
-                                SearchConfig.LOCATION);
+                        PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
+                                        JobPortal.NAUKRI);
 
-                Assert.assertTrue(
-                                naukri.hasResults(),
-                                "Naukri jobs not found.");
+                        naukri.goToNaukri();
 
-                CommonJobScraperService.scrapeJobs(
-                                page,
-                                "Naukri",
+                        TelegramNotifier.sendMessage(
+                                        "🔍 Searching jobs on Naukri");
 
-                                config.getJobCardSelector(),
+                        naukri.searchJobs(
+                                        SearchConfig.COMMA_SEPARATED_KEYWORDS,
+                                        SearchConfig.LOCATION);
 
-                                config.getCompanySelector(),
+                        Assert.assertTrue(
+                                        naukri.hasResults(),
+                                        "Naukri jobs not found.");
 
-                                config.getTitleSelector(),
+                        int beforeCount = JobCollectorService.getTotalJobs();
 
-                                config.getLocationSelector(),
+                        CommonJobScraperService.scrapeJobs(
 
-                                config.getPostedDateSelector(),
+                                        page,
+                                        "Naukri",
 
-                                config.getApplyLinkSelector());
+                                        config.getJobCardSelector(),
 
-                System.out.println(
-                                "Naukri jobs collected : "
-                                                + naukri.getJobCount());
+                                        config.getCompanySelector(),
+
+                                        config.getTitleSelector(),
+
+                                        config.getLocationSelector(),
+
+                                        config.getPostedDateSelector(),
+
+                                        config.getApplyLinkSelector());
+
+                        int afterCount = JobCollectorService.getTotalJobs();
+
+                        int portalStoredJobs = afterCount - beforeCount;
+
+                        TelegramNotifier.sendMessage(
+
+                                        "✅ Naukri scraping completed\n"
+                                                        + "📊 Unique Jobs Stored : "
+                                                        + portalStoredJobs);
+
+                } catch (Throwable e) {
+
+                        TelegramNotifier.sendMessage(
+
+                                        "❌ Naukri scraping failed\n\n"
+                                                        + "Reason : "
+                                                        + e.getMessage());
+
+                        throw e;
+                }
         }
 
         // ==========================================
@@ -132,40 +203,68 @@ public class Job_Search_Test extends Test_Base_Class {
         })
         public void indeedJobSearchTest() {
 
-                Indeed_POM indeed = new Indeed_POM(page);
+                try {
 
-                PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
-                                JobPortal.INDEED);
+                        TelegramNotifier.sendMessage(
+                                        "🌐 Opening Indeed");
 
-                indeed.goToIndeed();
+                        Indeed_POM indeed = new Indeed_POM(page);
 
-                indeed.searchJobs(
-                                SearchConfig.COMMA_SEPARATED_KEYWORDS,
-                                SearchConfig.LOCATION);
+                        PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
+                                        JobPortal.INDEED);
 
-                Assert.assertTrue(
-                                indeed.hasResults(),
-                                "Indeed jobs not found.");
+                        indeed.goToIndeed();
 
-                CommonJobScraperService.scrapeJobs(
-                                page,
-                                "Indeed",
+                        TelegramNotifier.sendMessage(
+                                        "🔍 Searching jobs on Indeed");
 
-                                config.getJobCardSelector(),
+                        indeed.searchJobs(
+                                        SearchConfig.COMMA_SEPARATED_KEYWORDS,
+                                        SearchConfig.LOCATION);
 
-                                config.getCompanySelector(),
+                        Assert.assertTrue(
+                                        indeed.hasResults(),
+                                        "Indeed jobs not found.");
 
-                                config.getTitleSelector(),
+                        int beforeCount = JobCollectorService.getTotalJobs();
 
-                                config.getLocationSelector(),
+                        CommonJobScraperService.scrapeJobs(
 
-                                config.getPostedDateSelector(),
+                                        page,
+                                        "Indeed",
 
-                                config.getApplyLinkSelector());
+                                        config.getJobCardSelector(),
 
-                System.out.println(
-                                "Indeed jobs collected : "
-                                                + indeed.getJobCount());
+                                        config.getCompanySelector(),
+
+                                        config.getTitleSelector(),
+
+                                        config.getLocationSelector(),
+
+                                        config.getPostedDateSelector(),
+
+                                        config.getApplyLinkSelector());
+
+                        int afterCount = JobCollectorService.getTotalJobs();
+
+                        int portalStoredJobs = afterCount - beforeCount;
+
+                        TelegramNotifier.sendMessage(
+
+                                        "✅ Indeed scraping completed\n"
+                                                        + "📊 Unique Jobs Stored : "
+                                                        + portalStoredJobs);
+
+                } catch (Throwable e) {
+
+                        TelegramNotifier.sendMessage(
+
+                                        "❌ Indeed scraping failed\n\n"
+                                                        + "Reason : "
+                                                        + e.getMessage());
+
+                        throw e;
+                }
         }
 
         // ==========================================
@@ -179,40 +278,68 @@ public class Job_Search_Test extends Test_Base_Class {
         })
         public void shineJobSearchTest() {
 
-                Shine_POM shine = new Shine_POM(page);
+                try {
 
-                PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
-                                JobPortal.SHINE);
+                        TelegramNotifier.sendMessage(
+                                        "🌐 Opening Shine");
 
-                shine.goToShine();
+                        Shine_POM shine = new Shine_POM(page);
 
-                shine.searchJobs(
-                                SearchConfig.OR_BASED_KEYWORDS,
-                                SearchConfig.LOCATION);
+                        PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
+                                        JobPortal.SHINE);
 
-                Assert.assertTrue(
-                                shine.hasResults(),
-                                "Shine jobs not found.");
+                        shine.goToShine();
 
-                CommonJobScraperService.scrapeJobs(
-                                page,
-                                "Shine",
+                        TelegramNotifier.sendMessage(
+                                        "🔍 Searching jobs on Shine");
 
-                                config.getJobCardSelector(),
+                        shine.searchJobs(
+                                        SearchConfig.OR_BASED_KEYWORDS,
+                                        SearchConfig.LOCATION);
 
-                                config.getCompanySelector(),
+                        Assert.assertTrue(
+                                        shine.hasResults(),
+                                        "Shine jobs not found.");
 
-                                config.getTitleSelector(),
+                        int beforeCount = JobCollectorService.getTotalJobs();
 
-                                config.getLocationSelector(),
+                        CommonJobScraperService.scrapeJobs(
 
-                                config.getPostedDateSelector(),
+                                        page,
+                                        "Shine",
 
-                                config.getApplyLinkSelector());
+                                        config.getJobCardSelector(),
 
-                System.out.println(
-                                "Shine jobs collected : "
-                                                + shine.getJobCount());
+                                        config.getCompanySelector(),
+
+                                        config.getTitleSelector(),
+
+                                        config.getLocationSelector(),
+
+                                        config.getPostedDateSelector(),
+
+                                        config.getApplyLinkSelector());
+
+                        int afterCount = JobCollectorService.getTotalJobs();
+
+                        int portalStoredJobs = afterCount - beforeCount;
+
+                        TelegramNotifier.sendMessage(
+
+                                        "✅ Shine scraping completed\n"
+                                                        + "📊 Unique Jobs Stored : "
+                                                        + portalStoredJobs);
+
+                } catch (Throwable e) {
+
+                        TelegramNotifier.sendMessage(
+
+                                        "❌ Shine scraping failed\n\n"
+                                                        + "Reason : "
+                                                        + e.getMessage());
+
+                        throw e;
+                }
         }
 
         // ==========================================
@@ -226,60 +353,67 @@ public class Job_Search_Test extends Test_Base_Class {
         })
         public void founditJobSearchTest() {
 
-                Foundit_POM foundit = new Foundit_POM(page);
+                try {
 
-                PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
-                                JobPortal.FOUNDIT);
+                        TelegramNotifier.sendMessage(
+                                        "🌐 Opening Foundit");
 
-                foundit.goToFoundit();
+                        Foundit_POM foundit = new Foundit_POM(page);
 
-                foundit.searchJobs(
-                                SearchConfig.COMMA_SEPARATED_KEYWORDS,
-                                SearchConfig.LOCATION);
+                        PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
+                                        JobPortal.FOUNDIT);
 
-                Assert.assertTrue(
-                                foundit.hasResults(),
-                                "Foundit jobs not found.");
+                        foundit.goToFoundit();
 
-                CommonJobScraperService.scrapeJobs(
-                                page,
-                                "Foundit",
+                        TelegramNotifier.sendMessage(
+                                        "🔍 Searching jobs on Foundit");
 
-                                config.getJobCardSelector(),
+                        foundit.searchJobs(
+                                        SearchConfig.COMMA_SEPARATED_KEYWORDS,
+                                        SearchConfig.LOCATION);
 
-                                config.getCompanySelector(),
+                        Assert.assertTrue(
+                                        foundit.hasResults(),
+                                        "Foundit jobs not found.");
 
-                                config.getTitleSelector(),
+                        int beforeCount = JobCollectorService.getTotalJobs();
 
-                                config.getLocationSelector(),
+                        CommonJobScraperService.scrapeJobs(
 
-                                config.getPostedDateSelector(),
+                                        page,
+                                        "Foundit",
 
-                                config.getApplyLinkSelector());
+                                        config.getJobCardSelector(),
 
-                System.out.println(
-                                "Foundit jobs collected : "
-                                                + foundit.getJobCount());
-        }
+                                        config.getCompanySelector(),
 
-        // ==========================================
-        // SAVE ALL JOBS
-        // ==========================================
+                                        config.getTitleSelector(),
 
-        @AfterSuite(alwaysRun = true)
-        public void saveAllJobs() {
+                                        config.getLocationSelector(),
 
-                JobFileStoreService.saveJobs(
-                                JobCollectorService.getAllJobs());
+                                        config.getPostedDateSelector(),
 
-                System.out.println(
-                                "Total unique jobs collected : "
-                                                + JobCollectorService.getTotalJobs());
+                                        config.getApplyLinkSelector());
 
-                // ==========================================
-                // CLOSE BROWSER
-                // ==========================================
+                        int afterCount = JobCollectorService.getTotalJobs();
 
-                closeBrowser();
+                        int portalStoredJobs = afterCount - beforeCount;
+
+                        TelegramNotifier.sendMessage(
+
+                                        "✅ Foundit scraping completed\n"
+                                                        + "📊 Unique Jobs Stored : "
+                                                        + portalStoredJobs);
+
+                } catch (Throwable e) {
+
+                        TelegramNotifier.sendMessage(
+
+                                        "❌ Foundit scraping failed\n\n"
+                                                        + "Reason : "
+                                                        + e.getMessage());
+
+                        throw e;
+                }
         }
 }

@@ -11,9 +11,7 @@ import config.FrameworkConfig;
 public class BrowserManager {
 
     private static Playwright playwright;
-
     private static Browser browser;
-
     private static boolean initialized = false;
 
     private BrowserManager() {
@@ -24,100 +22,142 @@ public class BrowserManager {
     // ==========================================
 
     public synchronized static void initBrowser() {
-
         if (initialized) {
-
             System.out.println(
                     "Browser already initialized.");
-
             return;
         }
 
         try {
-
             playwright = Playwright.create();
-
             BrowserType browserType;
+            BrowserType.LaunchOptions options = new BrowserType.LaunchOptions();
+
+            // ==========================================
+            // BROWSER SELECTION
+            // ==========================================
 
             switch (FrameworkConfig.BROWSER.toLowerCase()) {
 
-                case "firefox":
+                // ==========================================
+                // CHROME
+                // ==========================================
 
-                    browserType = playwright.firefox();
-
+                case "chrome":
+                    browserType = playwright.chromium();
+                    options.setChannel("chrome");
                     break;
+
+                // ==========================================
+                // MICROSOFT EDGE
+                // ==========================================
+
+                case "edge":
+                case "msedge":
+                    browserType = playwright.chromium();
+                    options.setChannel("msedge");
+                    break;
+
+                // ==========================================
+                // FIREFOX
+                // ==========================================
+
+                case "firefox":
+                    browserType = playwright.firefox();
+                    break;
+
+                // ==========================================
+                // WEBKIT
+                // ==========================================
 
                 case "webkit":
-
                     browserType = playwright.webkit();
-
                     break;
 
-                default:
+                // ==========================================
+                // DEFAULT CHROMIUM
+                // ==========================================
 
+                default:
                     browserType = playwright.chromium();
             }
 
-            browser = browserType.launch(
+            // ==========================================
+            // HEADLESS
+            // ==========================================
 
-                    new BrowserType.LaunchOptions()
+            options.setHeadless(
+                    FrameworkConfig.HEADLESS);
 
-                            .setHeadless(
-                                    FrameworkConfig.HEADLESS)
+            // ==========================================
+            // SLOWMO
+            // ==========================================
 
-                            .setSlowMo(
-                                    FrameworkConfig.HEADLESS
-                                            ? 80
-                                            : 0)
+            options.setSlowMo(
 
-                            .setArgs(Arrays.asList(
+                    FrameworkConfig.HEADLESS
+                            ? 100
+                            : 50);
 
-                                    // ==========================================
-                                    // ANTI BOT
-                                    // ==========================================
+            // ==========================================
+            // ANTI BOT + STABILITY
+            // ==========================================
 
-                                    "--disable-blink-features=AutomationControlled",
+            options.setArgs(Arrays.asList(
 
-                                    // ==========================================
-                                    // STABILITY
-                                    // ==========================================
+                    // ==========================================
+                    // ANTI BOT
+                    // ==========================================
 
-                                    "--disable-dev-shm-usage",
+                    "--disable-blink-features=AutomationControlled",
+                    "--disable-features=IsolateOrigins,site-per-process",
+                    "--disable-web-security",
+                    "--allow-running-insecure-content",
 
-                                    "--no-sandbox",
+                    // ==========================================
+                    // STABILITY
+                    // ==========================================
 
-                                    "--disable-setuid-sandbox",
+                    "--disable-dev-shm-usage",
+                    "--no-sandbox",
+                    "--disable-setuid-sandbox",
+                    "--disable-notifications",
+                    "--disable-popup-blocking",
+                    "--disable-infobars",
+                    "--disable-extensions",
+                    "--disable-background-networking",
+                    "--disable-sync",
+                    "--disable-default-apps",
+                    "--disable-renderer-backgrounding",
+                    "--start-maximized",
+                    "--disable-gpu"
 
-                                    "--disable-notifications",
+            ));
 
-                                    "--disable-popup-blocking",
+            // ==========================================
+            // LAUNCH BROWSER
+            // ==========================================
 
-                                    "--disable-infobars",
-
-                                    "--disable-gpu",
-
-                                    "--disable-extensions",
-
-                                    "--disable-background-networking",
-
-                                    "--disable-sync",
-
-                                    "--disable-default-apps",
-
-                                    "--disable-renderer-backgrounding"
-
-                            )));
+            browser = browserType.launch(options);
 
             initialized = true;
 
             System.out.println(
-                    "BrowserManager: Browser initialized successfully.");
-
-        } catch (Exception e) {
+                    "==========================================");
 
             System.out.println(
+                    "Browser initialized successfully.");
+            System.out.println(
+                    "Browser : "
+                            + FrameworkConfig.BROWSER);
+            System.out.println(
+                    "Headless : "
+                            + FrameworkConfig.HEADLESS);
+            System.out.println(
+                    "==========================================");
+        } catch (Exception e) {
+            System.out.println(
                     "BrowserManager: Failed to initialize browser.");
-
             e.printStackTrace();
         }
     }
@@ -129,10 +169,8 @@ public class BrowserManager {
     public static Browser getBrowser() {
 
         if (!initialized) {
-
             initBrowser();
         }
-
         return browser;
     }
 
@@ -143,28 +181,21 @@ public class BrowserManager {
     public synchronized static void closeBrowser() {
 
         try {
-
             if (browser != null) {
-
                 browser.close();
-
                 browser = null;
             }
 
             if (playwright != null) {
-
                 playwright.close();
-
                 playwright = null;
             }
 
             initialized = false;
-
             System.out.println(
                     "BrowserManager: Browser closed.");
 
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }
