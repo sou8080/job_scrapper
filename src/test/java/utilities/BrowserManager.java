@@ -1,98 +1,170 @@
 package utilities;
 
+import java.util.Arrays;
+
 import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Playwright;
+
 import config.FrameworkConfig;
 
-/**
- * Singleton manager for Playwright browser lifecycle.
- * Ensures a single Playwright instance and Browser are shared across all tests.
- */
 public class BrowserManager {
+
     private static Playwright playwright;
+
     private static Browser browser;
+
     private static boolean initialized = false;
 
     private BrowserManager() {
-        // Prevent instantiation
     }
 
-    /**
-     * Initialize Playwright and launch the browser if not already done.
-     * This method is thread‑safe and can be called from multiple test classes.
-     */
+    // ==========================================
+    // INIT BROWSER
+    // ==========================================
+
     public synchronized static void initBrowser() {
+
         if (initialized) {
+
+            System.out.println(
+                    "Browser already initialized.");
+
             return;
         }
+
         try {
+
             playwright = Playwright.create();
+
             BrowserType browserType;
+
             switch (FrameworkConfig.BROWSER.toLowerCase()) {
+
                 case "firefox":
+
                     browserType = playwright.firefox();
+
                     break;
+
                 case "webkit":
+
                     browserType = playwright.webkit();
+
                     break;
+
                 default:
+
                     browserType = playwright.chromium();
             }
-            browser = browserType.launch(new BrowserType.LaunchOptions()
-                    .setHeadless(FrameworkConfig.HEADLESS)
-                    .setArgs(java.util.Arrays.asList(
-                            "--disable-notifications",
-                            "--disable-popup-blocking",
-                            "--disable-save-password-bubble",
-                            "--disable-infobars",
-                            "--disable-geolocation",
-                            "--disable-blink-features=AutomationControlled",
-                            "--disable-dev-shm-usage",
-                            "--no-sandbox",
-                            "--disable-web-security",
-                            "--disable-features=IsolateOrigins,site-per-process")));
+
+            browser = browserType.launch(
+
+                    new BrowserType.LaunchOptions()
+
+                            .setHeadless(
+                                    FrameworkConfig.HEADLESS)
+
+                            .setSlowMo(
+                                    FrameworkConfig.HEADLESS
+                                            ? 80
+                                            : 0)
+
+                            .setArgs(Arrays.asList(
+
+                                    // ==========================================
+                                    // ANTI BOT
+                                    // ==========================================
+
+                                    "--disable-blink-features=AutomationControlled",
+
+                                    // ==========================================
+                                    // STABILITY
+                                    // ==========================================
+
+                                    "--disable-dev-shm-usage",
+
+                                    "--no-sandbox",
+
+                                    "--disable-setuid-sandbox",
+
+                                    "--disable-notifications",
+
+                                    "--disable-popup-blocking",
+
+                                    "--disable-infobars",
+
+                                    "--disable-gpu",
+
+                                    "--disable-extensions",
+
+                                    "--disable-background-networking",
+
+                                    "--disable-sync",
+
+                                    "--disable-default-apps",
+
+                                    "--disable-renderer-backgrounding"
+
+                            )));
+
             initialized = true;
-            System.out.println("BrowserManager: Browser initialized successfully.");
+
+            System.out.println(
+                    "BrowserManager: Browser initialized successfully.");
+
         } catch (Exception e) {
-            System.out.println("BrowserManager: Failed to initialize browser.");
+
+            System.out.println(
+                    "BrowserManager: Failed to initialize browser.");
+
             e.printStackTrace();
-            throw e;
         }
     }
 
-    public static Playwright getPlaywright() {
-        if (!initialized) {
-            initBrowser();
-        }
-        return playwright;
-    }
+    // ==========================================
+    // GET BROWSER
+    // ==========================================
 
     public static Browser getBrowser() {
+
         if (!initialized) {
+
             initBrowser();
         }
+
         return browser;
     }
 
-    /**
-     * Close the shared browser and Playwright instance.
-     * Safe to call multiple times.
-     */
+    // ==========================================
+    // CLOSE BROWSER
+    // ==========================================
+
     public synchronized static void closeBrowser() {
+
         try {
+
             if (browser != null) {
+
                 browser.close();
+
                 browser = null;
             }
+
             if (playwright != null) {
+
                 playwright.close();
+
                 playwright = null;
             }
+
             initialized = false;
-            System.out.println("BrowserManager: Browser and Playwright closed.");
+
+            System.out.println(
+                    "BrowserManager: Browser closed.");
+
         } catch (Exception e) {
-            System.out.println("BrowserManager: Error during close.");
+
             e.printStackTrace();
         }
     }

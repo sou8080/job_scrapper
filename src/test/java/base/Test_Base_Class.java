@@ -1,24 +1,19 @@
 package base;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
-import com.microsoft.playwright.options.LoadState;
-
-import config.FrameworkConfig;
+import java.nio.file.Paths;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.ColorScheme;
+import com.microsoft.playwright.options.LoadState;
+
 import utilities.BrowserManager;
 
 public class Test_Base_Class {
-
-    protected static Playwright playwright;
-
-    protected static Browser browser;
 
     protected BrowserContext context;
 
@@ -33,66 +28,102 @@ public class Test_Base_Class {
 
         try {
 
-            // ==========================================
-            // AVOID MULTIPLE BROWSER LAUNCH
-            // ==========================================
-
-            if (browser != null) {
-
-                System.out.println(
-                        "Browser already initialized.");
-
-                return;
-            }
+            Browser browser = BrowserManager.getBrowser();
 
             // ==========================================
-            // PLAYWRIGHT INIT
+            // CONTEXT
             // ==========================================
 
-            playwright = Playwright.create();
+            context = browser.newContext(
 
-            BrowserType browserType;
+                    new Browser.NewContextOptions()
+
+                            // ==========================================
+                            // VIEWPORT
+                            // ==========================================
+
+                            .setViewportSize(
+                                    1920,
+                                    1080)
+
+                            // ==========================================
+                            // USER AGENT
+                            // ==========================================
+
+                            .setUserAgent(
+
+                                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+                                            "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                                            "Chrome/136.0.0.0 Safari/537.36")
+
+                            // ==========================================
+                            // LOCALE
+                            // ==========================================
+
+                            .setLocale(
+                                    "en-US")
+
+                            // ==========================================
+                            // TIMEZONE
+                            // ==========================================
+
+                            .setTimezoneId(
+                                    "Asia/Kolkata")
+
+                            // ==========================================
+                            // HTTPS
+                            // ==========================================
+
+                            .setIgnoreHTTPSErrors(
+                                    true)
+
+                            // ==========================================
+                            // JAVASCRIPT
+                            // ==========================================
+
+                            .setJavaScriptEnabled(
+                                    true)
+
+                            // ==========================================
+                            // COLOR SCHEME
+                            // ==========================================
+
+                            .setColorScheme(
+                                    ColorScheme.LIGHT));
 
             // ==========================================
-            // BROWSER SELECTION
+            // PAGE
             // ==========================================
 
-            switch (FrameworkConfig.BROWSER.toLowerCase()) {
-
-                case "firefox":
-
-                    browserType = playwright.firefox();
-
-                    break;
-
-                case "webkit":
-
-                    browserType = playwright.webkit();
-
-                    break;
-
-                default:
-
-                    browserType = playwright.chromium();
-            }
+            page = context.newPage();
 
             // ==========================================
-            // LAUNCH BROWSER
+            // REMOVE WEBDRIVER FLAG
             // ==========================================
 
-            try {
-        // Context and page will be created in individual test methods via SessionLoginManager.
-        // No need to create them here.
-        // Ensure BrowserManager is initialized.
-        BrowserManager.initBrowser();
-        playwright = BrowserManager.getPlaywright();
-        browser = BrowserManager.getBrowser();
-            } catch (Exception e) {
-                System.out.println("Browser initialization via BrowserManager failed.");
-                e.printStackTrace();
-            }
+            page.addInitScript(
+
+                    "Object.defineProperty(" +
+                            "navigator, " +
+                            "'webdriver', {" +
+                            "get: () => undefined" +
+                            "});");
+
+            // ==========================================
+            // TIMEOUTS
+            // ==========================================
+
+            page.setDefaultTimeout(
+                    15000);
+
+            page.setDefaultNavigationTimeout(
+                    30000);
+
+            System.out.println(
+                    "Browser setup completed successfully.");
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
@@ -101,20 +132,17 @@ public class Test_Base_Class {
     // COMMON NAVIGATION
     // ==========================================
 
-    protected void navigateTo(String url) {
+    protected void navigateTo(
+            String url) {
 
         try {
-
-            if (page == null) {
-
-                throw new RuntimeException(
-                        "Page is null. Initialize page before navigation.");
-            }
 
             page.navigate(url);
 
             page.waitForLoadState(
-                    LoadState.NETWORKIDLE);
+                    LoadState.DOMCONTENTLOADED);
+
+            page.waitForTimeout(5000);
 
             System.out.println(
                     "Navigation successful : "
@@ -122,16 +150,21 @@ public class Test_Base_Class {
 
         } catch (Exception e) {
 
-            System.out.println(
-                    "Navigation failed : "
-                            + url);
+            try {
+
+                page.screenshot(
+
+                        new Page.ScreenshotOptions()
+
+                                .setPath(
+                                        Paths.get(
+                                                "navigation_failure.png")));
+
+            } catch (Exception ignored) {
+            }
 
             e.printStackTrace();
         }
-    }
-
-    protected void navigateToPortal(utilities.JobPortal portal) {
-        navigateTo(config.PortalConfig.getUrl(portal));
     }
 
     // ==========================================
@@ -143,10 +176,6 @@ public class Test_Base_Class {
 
         try {
 
-            // ==========================================
-            // CLOSE PAGE
-            // ==========================================
-
             if (page != null) {
 
                 page.close();
@@ -154,10 +183,6 @@ public class Test_Base_Class {
                 System.out.println(
                         "Page closed.");
             }
-
-            // ==========================================
-            // CLOSE CONTEXT
-            // ==========================================
 
             if (context != null) {
 
@@ -174,11 +199,11 @@ public class Test_Base_Class {
     }
 
     // ==========================================
-    // GLOBAL BROWSER CLOSE
+    // CLOSE SHARED BROWSER
     // ==========================================
 
     public static void closeBrowser() {
-        // Delegate shutdown to BrowserManager for consistent cleanup
+
         BrowserManager.closeBrowser();
     }
 }

@@ -3,67 +3,169 @@ package pom;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
-import com.microsoft.playwright.options.WaitForSelectorState;
+import com.microsoft.playwright.options.WaitUntilState;
 
 import config.PortalConfig;
+
 import utilities.JobPortal;
+import utilities.ScreenshotUtils;
 
 public class Naukri_POM {
 
         private final Page page;
 
-        // ==========================================
-        // URL
-        // ==========================================
+        private final String NAUKRI_URL = PortalConfig.getUrl(
+                        JobPortal.NAUKRI);
 
-        private final String NAUKRI_URL = PortalConfig.getUrl(JobPortal.NAUKRI);
+        private final String[] keywordSelectors = {
+                        "input.suggestor-input",
+                        "input[placeholder*='Enter skills']",
+                        "input[placeholder*='skills']",
+                        "input[placeholder*='designation']",
+                        "input[type='text']"
+        };
 
-        // ==========================================
-        // SEARCH SELECTORS
-        // ==========================================
+        private final String[] locationSelectors = {
+                        "input[placeholder*='location']",
+                        "input[placeholder*='Location']",
+                        "input[placeholder*='city']",
+                        "input.suggestor-location"
+        };
 
-        private final String keywordInput = "input.suggestor-input";
-        private final String locationInput = "input[placeholder*='location']";
-        private final String searchButton = ".qsbSubmit";
-        private final String jobCards = ".srp-jobtuple-wrapper";
+        private final String[] searchButtonSelectors = {
+                        ".qsbSubmit",
+                        "button.qsbSubmit",
+                        "button[type='submit']",
+                        ".search-btn"
+        };
 
-        // ==========================================
-        // CONSTRUCTOR
-        // ==========================================
+        private final String[] jobCardSelectors = {
+                        ".srp-jobtuple-wrapper",
+                        ".cust-job-tuple",
+                        ".jobTuple",
+                        ".jobCard",
+                        ".styles_job-listing-container",
+                        "article.jobTuple",
+                        ".tuple-wrap",
+                        ".jobTupleHeader",
+                        ".jobTuple.bgWhite",
+                        "div[data-job-id]"
+        };
 
         public Naukri_POM(Page page) {
 
                 this.page = page;
         }
 
-        // ==========================================
-        // OPEN NAUKRI
-        // ==========================================
-
         public void goToNaukri() {
 
                 try {
 
-                        page.navigate(NAUKRI_URL);
+                        page.navigate(
+                                        NAUKRI_URL,
+                                        new Page.NavigateOptions()
+                                                        .setWaitUntil(
+                                                                        WaitUntilState.DOMCONTENTLOADED));
 
                         page.waitForLoadState(
                                         LoadState.DOMCONTENTLOADED);
+
+                        waitMedium();
 
                         System.out.println(
                                         "Naukri opened successfully.");
 
                 } catch (Exception e) {
 
-                        System.out.println(
-                                        "Failed to open Naukri.");
+                        ScreenshotUtils.captureScreenshot(
+                                        page,
+                                        JobPortal.NAUKRI,
+                                        "naukri_open_failure.png");
 
                         e.printStackTrace();
                 }
         }
 
-        // ==========================================
-        // SEARCH JOBS
-        // ==========================================
+        private void waitShort() {
+
+                page.waitForTimeout(1000);
+        }
+
+        private void waitMedium() {
+
+                page.waitForTimeout(3000);
+        }
+
+        private Locator findWorkingLocator(
+                        String[] selectors) {
+
+                for (String selector : selectors) {
+
+                        try {
+
+                                Locator locator = page.locator(selector)
+                                                .first();
+
+                                locator.waitFor(
+                                                new Locator.WaitForOptions()
+                                                                .setTimeout(3000));
+
+                                if (locator.count() > 0
+                                                && locator.isVisible()) {
+
+                                        return locator;
+                                }
+
+                        } catch (Exception ignored) {
+                        }
+                }
+
+                throw new RuntimeException(
+                                "No working locator found.");
+        }
+
+        private String getWorkingJobCardSelector() {
+
+                for (String selector : jobCardSelectors) {
+
+                        try {
+
+                                if (page.locator(selector)
+                                                .count() > 0) {
+
+                                        return selector;
+                                }
+
+                        } catch (Exception ignored) {
+                        }
+                }
+
+                throw new RuntimeException(
+                                "No working job card selector found.");
+        }
+
+        private void fillField(
+                        Locator field,
+                        String value) {
+
+                field.scrollIntoViewIfNeeded();
+
+                field.click();
+
+                waitShort();
+
+                field.press("Control+A");
+
+                waitShort();
+
+                field.press("Backspace");
+
+                waitShort();
+
+                field.fill(value);
+
+                waitMedium();
+        }
 
         public void searchJobs(
                         String keyword,
@@ -71,134 +173,106 @@ public class Naukri_POM {
 
                 try {
 
-                        // ==========================================
-                        // WAIT PAGE LOAD
-                        // ==========================================
-
                         page.waitForLoadState(
                                         LoadState.DOMCONTENTLOADED);
 
-                        // ==========================================
-                        // LOCATORS
-                        // ==========================================
+                        waitMedium();
 
-                        Locator keywordBox = page.locator(
-                                        keywordInput).first();
+                        Locator keywordField = findWorkingLocator(
+                                        keywordSelectors);
 
-                        Locator locationBox = page.locator(
-                                        locationInput).first();
-
-                        Locator searchBtn = page.locator(
-                                        searchButton).first();
-
-                        // ==========================================
-                        // WAIT & ENTER KEYWORD
-                        // ==========================================
-
-                        keywordBox.waitFor(
-                                        new Locator.WaitForOptions()
-                                                        .setState(
-                                                                        WaitForSelectorState.VISIBLE)
-                                                        .setTimeout(10000));
-
-                        keywordBox.fill(keyword);
+                        fillField(
+                                        keywordField,
+                                        keyword);
 
                         System.out.println(
-                                        "Keyword entered : " + keyword);
+                                        "Keyword entered : "
+                                                        + keyword);
 
-                        // ==========================================
-                        // WAIT & ENTER LOCATION
-                        // ==========================================
+                        Locator locationField = findWorkingLocator(
+                                        locationSelectors);
 
-                        locationBox.waitFor(
-                                        new Locator.WaitForOptions()
-                                                        .setState(
-                                                                        WaitForSelectorState.VISIBLE)
-                                                        .setTimeout(10000));
+                        fillField(
+                                        locationField,
+                                        location);
 
-                        locationBox.fill(location);
-
-                        System.out.println(
-                                        "Location entered : " + location);
-
-                        // ==========================================
-                        // CLICK SEARCH
-                        // ==========================================
-
-                        searchBtn.waitFor(
-                                        new Locator.WaitForOptions()
-                                                        .setState(
-                                                                        WaitForSelectorState.VISIBLE)
-                                                        .setTimeout(10000));
-
-                        searchBtn.click();
+                        ScreenshotUtils.captureScreenshot(
+                                        page,
+                                        JobPortal.NAUKRI,
+                                        "naukri_location_filled.png");
 
                         System.out.println(
-                                        "Search button clicked.");
+                                        "Location entered : "
+                                                        + location);
 
-                        // ==========================================
-                        // WAIT RESULT PAGE
-                        // ==========================================
+                        try {
 
-                        page.waitForSelector(
-                                        jobCards,
-                                        new Page.WaitForSelectorOptions()
-                                                        .setTimeout(15000));
+                                Locator searchBtn = findWorkingLocator(
+                                                searchButtonSelectors);
 
-                        // ==========================================
-                        // FAST SCROLL
-                        // ==========================================
+                                searchBtn.scrollIntoViewIfNeeded();
 
-                        page.mouse().wheel(0, 5000);
+                                waitShort();
 
-                        page.waitForTimeout(1000);
+                                searchBtn.click();
 
-                        page.mouse().wheel(0, 5000);
+                                waitMedium();
 
-                        page.waitForTimeout(1000);
+                        } catch (Exception e) {
 
-                        // ==========================================
-                        // RESULT VALIDATION
-                        // ==========================================
+                                ScreenshotUtils.captureScreenshot(
+                                                page,
+                                                JobPortal.NAUKRI,
+                                                "naukri_search_click_failure.png");
+
+                                keywordField.press(
+                                                "Enter");
+                        }
+
+                        page.waitForTimeout(8000);
 
                         int totalJobs = getJobCount();
 
                         System.out.println(
-                                        "Naukri jobs found : " + totalJobs);
+                                        "Naukri jobs found : "
+                                                        + totalJobs);
 
                         System.out.println(
                                         "Naukri search completed successfully.");
 
                 } catch (Exception e) {
 
-                        System.out.println(
-                                        "Naukri search failed.");
+                        ScreenshotUtils.captureScreenshot(
+                                        page,
+                                        JobPortal.NAUKRI,
+                                        "naukri_search_failure.png");
 
                         e.printStackTrace();
                 }
         }
 
-        // ==========================================
-        // RESULTS
-        // ==========================================
-
         public boolean hasResults() {
 
-                return page.locator(
-                                jobCards)
-                                .count() > 0;
+                return getJobCount() > 0;
         }
 
         public int getJobCount() {
 
-                return page.locator(
-                                jobCards)
-                                .count();
+                try {
+
+                        return page.locator(
+                                        getWorkingJobCardSelector())
+                                        .count();
+
+                } catch (Exception e) {
+
+                        return 0;
+                }
         }
 
         public Locator getJobCards() {
 
                 return page.locator(
-                                jobCards);
+                                getWorkingJobCardSelector());
         }
 }

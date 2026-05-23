@@ -2,8 +2,6 @@ package testcases;
 
 import base.Test_Base_Class;
 
-import com.microsoft.playwright.Browser;
-
 import config.SearchConfig;
 
 import factory.PortalScrapeConfigFactory;
@@ -40,56 +38,20 @@ public class Job_Search_Test extends Test_Base_Class {
         })
         public void linkedInJobSearchTest() {
 
-                // ==========================================
-                // CONTEXT
-                // ==========================================
-
-                context = browser.newContext(
-                                new Browser.NewContextOptions()
-                                                .setViewportSize(1440, 900));
-
-                context.clearPermissions();
-
-                page = context.newPage();
-
-                // ==========================================
-                // POM
-                // ==========================================
-
                 LinkedIn_POM linkedIn = new LinkedIn_POM(page);
-
-                // ==========================================
-                // CONFIG
-                // ==========================================
 
                 PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
                                 JobPortal.LINKEDIN);
 
-                // ==========================================
-                // OPEN
-                // ==========================================
-
                 linkedIn.goToLinkedIn();
-
-                // ==========================================
-                // SEARCH
-                // ==========================================
 
                 linkedIn.searchJobs(
                                 SearchConfig.OR_BASED_KEYWORDS,
                                 SearchConfig.LOCATION);
 
-                // ==========================================
-                // ASSERT
-                // ==========================================
-
                 Assert.assertTrue(
                                 linkedIn.hasResults(),
                                 "LinkedIn jobs not found.");
-
-                // ==========================================
-                // SCRAPE
-                // ==========================================
 
                 CommonJobScraperService.scrapeJobs(
                                 page,
@@ -122,14 +84,6 @@ public class Job_Search_Test extends Test_Base_Class {
                         "regression"
         })
         public void naukriJobSearchTest() {
-
-                context = browser.newContext(
-                                new Browser.NewContextOptions()
-                                                .setViewportSize(1440, 900));
-
-                context.clearPermissions();
-
-                page = context.newPage();
 
                 Naukri_POM naukri = new Naukri_POM(page);
 
@@ -178,14 +132,6 @@ public class Job_Search_Test extends Test_Base_Class {
         })
         public void indeedJobSearchTest() {
 
-                context = browser.newContext(
-                                new Browser.NewContextOptions()
-                                                .setViewportSize(1440, 900));
-
-                context.clearPermissions();
-
-                page = context.newPage();
-
                 Indeed_POM indeed = new Indeed_POM(page);
 
                 PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
@@ -233,14 +179,6 @@ public class Job_Search_Test extends Test_Base_Class {
         })
         public void shineJobSearchTest() {
 
-                context = browser.newContext(
-                                new Browser.NewContextOptions()
-                                                .setViewportSize(1440, 900));
-
-                context.clearPermissions();
-
-                page = context.newPage();
-
                 Shine_POM shine = new Shine_POM(page);
 
                 PortalScrapeConfig config = PortalScrapeConfigFactory.getConfig(
@@ -287,14 +225,6 @@ public class Job_Search_Test extends Test_Base_Class {
                         "regression"
         })
         public void founditJobSearchTest() {
-
-                context = browser.newContext(
-                                new Browser.NewContextOptions()
-                                                .setViewportSize(1440, 900));
-
-                context.clearPermissions();
-
-                page = context.newPage();
 
                 Foundit_POM foundit = new Foundit_POM(page);
 
