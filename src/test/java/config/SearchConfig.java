@@ -16,37 +16,13 @@ public class SearchConfig {
         // RAW KEYWORDS
         // ==========================================
 
-        public static final List<String> KEYWORDS = Arrays.stream(
-
-                        ConfigLoader.get("job_search_keywords")
-                                        .split(","))
-
-                        .map(String::trim)
-
-                        .filter(keyword -> !keyword.isEmpty())
-
-                        .distinct()
-
+        public static final List<String> KEYWORDS = Arrays.stream(ConfigLoader.get("job_search_keywords").split(","))
+                        .map(String::trim).filter(keyword -> !keyword.isEmpty()).distinct()
                         .collect(Collectors.toList());
 
-        // ==========================================
-        // COMMA BASED SEARCH
-        // BEST FOR:
-        // Naukri
-        // Foundit
-        // Indeed
-        // ==========================================
+        public static final String COMMA_SEPARATED_KEYWORDS = buildCommaSeparatedKeywords(); // COMMA BASED SEARCH
 
-        public static final String COMMA_SEPARATED_KEYWORDS = buildCommaSeparatedKeywords();
-
-        // ==========================================
-        // OR BASED SEARCH
-        // BEST FOR:
-        // LinkedIn
-        // Shine
-        // ==========================================
-
-        public static final String OR_BASED_KEYWORDS = buildOrBasedKeywords();
+        public static final String OR_BASED_KEYWORDS = buildOrBasedKeywords(); // OR BASED SEARCH
 
         // ==========================================
         // COMMA KEYWORDS BUILDER
@@ -59,7 +35,6 @@ public class SearchConfig {
                 // ==========================================
 
                 if (KEYWORDS.size() == 1) {
-
                         return KEYWORDS.get(0).trim();
                 }
 
@@ -67,14 +42,7 @@ public class SearchConfig {
                 // MULTIPLE KEYWORDS
                 // ==========================================
 
-                return KEYWORDS.stream()
-
-                                .map(String::toLowerCase)
-
-                                .map(String::trim)
-
-                                .distinct()
-
+                return KEYWORDS.stream().map(String::toLowerCase).map(String::trim).distinct()
                                 .collect(Collectors.joining(", "));
         }
 
@@ -84,27 +52,10 @@ public class SearchConfig {
 
         private static String buildOrBasedKeywords() {
 
-                // ==========================================
-                // SINGLE KEYWORD
-                // ==========================================
-
                 if (KEYWORDS.size() == 1) {
-
                         return KEYWORDS.get(0).trim();
                 }
-
-                // ==========================================
-                // MULTIPLE KEYWORDS
-                // ==========================================
-
-                return KEYWORDS.stream()
-
-                                .map(String::toLowerCase)
-
-                                .map(String::trim)
-
-                                .distinct()
-
+                return KEYWORDS.stream().map(String::toLowerCase).map(String::trim).distinct()
                                 .collect(Collectors.joining(" OR "));
         }
 }

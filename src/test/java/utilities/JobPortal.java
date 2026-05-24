@@ -6,17 +6,16 @@ public enum JobPortal {
     INDEED("indeed"),
     NAUKRI("naukri"),
     SHINE("shine"),
-    FOUNDIT("foundit");
+    FOUNDIT("foundit"),
+    TIMESJOBS("timesjobs");
 
     private final String portalName;
 
     JobPortal(String portalName) {
-
         this.portalName = portalName;
     }
 
     public String getPortalName() {
-
         return portalName;
     }
 }

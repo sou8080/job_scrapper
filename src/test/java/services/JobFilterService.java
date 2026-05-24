@@ -1,350 +1,367 @@
 package services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import config.SearchConfig;
-
 public class JobFilterService {
 
-        // ==========================================
-        // DAY LIMITS
-        // ==========================================
+        private static final Logger log = LoggerFactory.getLogger(JobFilterService.class);
 
-        private static final int[] DAY_LIMITS = {
-                        7,
-                        14,
-                        21,
-                        28
-        };
+        private static final int[] DAY_LIMITS = { 7, 14, 21, 28 };
 
-        // ==========================================
-        // CURRENT LIMIT INDEX
-        // ==========================================
+        private static final int MIN_TOKEN_LENGTH = 2;
 
-        private static int currentLimitIndex = 0;
-
-        // ==========================================
-        // JOB FOUND FLAG
-        // ==========================================
-
-        private static boolean jobsFound = false;
-
-        // ==========================================
-        // NUMBER PATTERN
-        // ==========================================
+        private static final int MAX_LEVENSHTEIN_DIST = 1;
 
         private static final Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
 
-        // ==========================================
-        // KEYWORD FILTER
-        // FULLY DYNAMIC
-        // ==========================================
+        private static final List<DateTimeFormatter> DATE_FORMATTERS = List.of(
+                        DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                        DateTimeFormatter.ISO_LOCAL_DATE);
 
-        public static boolean isRelevant(
-                        String text) {
+        private final List<String> keywords;
 
-                try {
+        private int dayLimitIndex = 0;
 
-                        // ==========================================
-                        // NULL SAFE
-                        // ==========================================
+        private boolean jobsFound = false;
 
-                        if (text == null
-                                        || text.isBlank()) {
+        public JobFilterService(List<String> keywords) {
 
-                                return false;
+                Objects.requireNonNull(
+                                keywords,
+                                "keywords must not be null");
+
+                this.keywords = keywords;
+        }
+
+        public boolean isRelevant(String title) {
+
+                if (isBlank(title)) {
+                        return false;
+                }
+
+                String normalizedTitle = normalize(title);
+
+                log.debug(
+                                "Checking relevance for title='{}'",
+                                normalizedTitle);
+
+                for (String keyword : keywords) {
+
+                        if (isBlank(keyword)) {
+                                continue;
                         }
 
-                        // ==========================================
-                        // NORMALIZE ROLE
-                        // ==========================================
+                        String normalizedKeyword = normalize(keyword);
 
-                        String role = normalize(text);
+                        if (normalizedTitle.contains(
+                                        normalizedKeyword)) {
 
-                        // ==========================================
-                        // KEYWORD LOOP
-                        // ==========================================
+                                log.debug(
+                                                "Exact match | title='{}' keyword='{}'",
+                                                normalizedTitle,
+                                                normalizedKeyword);
 
-                        for (String keyword : SearchConfig.KEYWORDS) {
-
-                                if (keyword == null
-                                                || keyword.isBlank()) {
-
-                                        continue;
-                                }
-
-                                // ==========================================
-                                // NORMALIZE KEYWORD
-                                // ==========================================
-
-                                String normalizedKeyword = normalize(keyword);
-
-                                // ==========================================
-                                // FULL PHRASE MATCH
-                                // ==========================================
-
-                                if (role.contains(normalizedKeyword)) {
-
-                                        return true;
-                                }
-
-                                // ==========================================
-                                // TOKEN MATCH
-                                // ==========================================
-
-                                String[] tokens = normalizedKeyword.split("\\s+");
-
-                                int matchedTokens = 0;
-
-                                for (String token : tokens) {
-
-                                        // ==========================================
-                                        // SKIP WEAK TOKENS
-                                        // ==========================================
-
-                                        if (token.length() <= 1) {
-
-                                                continue;
-                                        }
-
-                                        // ==========================================
-                                        // TOKEN MATCH
-                                        // ==========================================
-
-                                        if (role.contains(token)) {
-
-                                                matchedTokens++;
-                                        }
-                                }
-
-                                // ==========================================
-                                // MATCH THRESHOLD
-                                // ==========================================
-
-                                if (tokens.length == 1
-                                                && matchedTokens >= 1) {
-
-                                        return true;
-                                }
-
-                                if (tokens.length == 2
-                                                && matchedTokens >= 1) {
-
-                                        return true;
-                                }
-
-                                if (tokens.length >= 3
-                                                && matchedTokens >= 2) {
-
-                                        return true;
-                                }
+                                return true;
                         }
 
-                } catch (Exception ignored) {
+                        if (matchesByTokens(
+                                        normalizedTitle,
+                                        normalizedKeyword)) {
+
+                                return true;
+                        }
+                }
+
+                log.debug(
+                                "Rejected | title='{}'",
+                                normalizedTitle);
+
+                return false;
+        }
+
+        public boolean isRecent(String posted) {
+
+                if (isBlank(posted)
+                                || posted.equalsIgnoreCase("N/A")) {
+
+                        return true;
+                }
+
+                String normalized = normalizePostedDate(posted);
+
+                if (isImmediatePost(normalized)) {
+
+                        markJobFound();
+
+                        return true;
+                }
+
+                Optional<LocalDate> parsedDate = tryParseDate(normalized);
+
+                if (parsedDate.isPresent()) {
+
+                        long daysAgo = ChronoUnit.DAYS.between(
+                                        parsedDate.get(),
+                                        LocalDate.now());
+
+                        return acceptIfWithinLimit(
+                                        (int) daysAgo);
+                }
+
+                return tryParseRelativeDate(normalized);
+        }
+
+        public void expandRangeIfNeeded() {
+
+                if (jobsFound) {
+
+                        log.info(
+                                        "Jobs found within {} days — keeping current range.",
+                                        currentDayLimit());
+
+                        return;
+                }
+
+                if (dayLimitIndex < DAY_LIMITS.length - 1) {
+
+                        dayLimitIndex++;
+
+                        log.info(
+                                        "No jobs found. Expanding range to {} days.",
+                                        currentDayLimit());
+
+                } else {
+
+                        log.info(
+                                        "Already at maximum range ({} days).",
+                                        currentDayLimit());
+                }
+        }
+
+        public void reset() {
+
+                dayLimitIndex = 0;
+
+                jobsFound = false;
+        }
+
+        public int currentDayLimit() {
+
+                return DAY_LIMITS[dayLimitIndex];
+        }
+
+        public boolean hasJobsFound() {
+
+                return jobsFound;
+        }
+
+        private boolean matchesByTokens(
+                        String title,
+                        String keyword) {
+
+                String[] tokens = keyword
+                                .toLowerCase()
+                                .replace("or", " ")
+                                .split("\\s+");
+
+                for (String token : tokens) {
+
+                        token = token.trim();
+
+                        if (token.length() < MIN_TOKEN_LENGTH) {
+                                continue;
+                        }
+
+                        if (titleContainsToken(title, token)) {
+
+                                log.debug(
+                                                "Token matched | title='{}' token='{}'",
+                                                title,
+                                                token);
+
+                                return true;
+                        }
                 }
 
                 return false;
         }
 
-        // ==========================================
-        // NORMALIZER
-        // ==========================================
+        private boolean titleContainsToken(
+                        String title,
+                        String token) {
+
+                if (title.contains(token)) {
+                        return true;
+                }
+
+                for (String titleToken : title.split("\\s+")) {
+
+                        if (titleToken.startsWith(token)
+                                        || token.startsWith(titleToken)
+                                        || levenshteinDistance(
+                                                        titleToken,
+                                                        token) <= MAX_LEVENSHTEIN_DIST) {
+
+                                return true;
+                        }
+                }
+
+                return false;
+        }
+
+        private static String normalizePostedDate(
+                        String raw) {
+
+                return raw.toLowerCase()
+                                .replace("posted on", "")
+                                .replace("posted", "")
+                                .replace("ago", "")
+                                .replace("+", "")
+                                .replace(":", "")
+                                .trim();
+        }
+
+        private static boolean isImmediatePost(
+                        String normalized) {
+
+                return normalized.contains("today")
+                                || normalized.contains("just posted")
+                                || normalized.contains("hour")
+                                || normalized.contains("minute");
+        }
+
+        private static Optional<LocalDate> tryParseDate(
+                        String text) {
+
+                for (DateTimeFormatter fmt : DATE_FORMATTERS) {
+
+                        try {
+
+                                return Optional.of(
+                                                LocalDate.parse(text, fmt));
+
+                        } catch (DateTimeParseException ignored) {
+                        }
+                }
+
+                return Optional.empty();
+        }
+
+        private boolean tryParseRelativeDate(
+                        String normalized) {
+
+                Matcher m = NUMBER_PATTERN.matcher(normalized);
+
+                if (!m.find()) {
+
+                        log.debug(
+                                        "Could not extract number from posted date: '{}'",
+                                        normalized);
+
+                        return false;
+                }
+
+                int value = Integer.parseInt(m.group());
+
+                if (normalized.contains("day")) {
+                        return acceptIfWithinLimit(value);
+                }
+
+                if (normalized.contains("week")) {
+                        return acceptIfWithinLimit(value * 7);
+                }
+
+                if (normalized.contains("month")) {
+                        return acceptIfWithinLimit(value * 30);
+                }
+
+                log.debug(
+                                "Unknown date unit in: '{}'",
+                                normalized);
+
+                return false;
+        }
+
+        private boolean acceptIfWithinLimit(
+                        int daysAgo) {
+
+                if (daysAgo <= currentDayLimit()) {
+
+                        markJobFound();
+
+                        return true;
+                }
+
+                return false;
+        }
+
+        private void markJobFound() {
+
+                jobsFound = true;
+        }
 
         private static String normalize(
                         String text) {
 
                 return text.toLowerCase()
-
+                                .replaceAll("\\bor\\b", " ")
                                 .replaceAll("[^a-z0-9 ]", " ")
-
                                 .replaceAll("\\s+", " ")
-
                                 .trim();
         }
 
-        // ==========================================
-        // DATE FILTER
-        // ==========================================
+        private static boolean isBlank(
+                        String s) {
 
-        public static boolean isRecent(
-                        String posted) {
+                return s == null || s.isBlank();
+        }
 
-                try {
+        private static int levenshteinDistance(
+                        String a,
+                        String b) {
 
-                        // ==========================================
-                        // NULL SAFE
-                        // ==========================================
+                int m = a.length();
 
-                        if (posted == null
-                                        || posted.isBlank()
-                                        || posted.equalsIgnoreCase("N/A")) {
+                int n = b.length();
 
-                                return true;
-                        }
+                int[][] dp = new int[m + 1][n + 1];
 
-                        // ==========================================
-                        // NORMALIZE
-                        // ==========================================
-
-                        posted = posted
-                                        .toLowerCase()
-                                        .replace("posted", "")
-                                        .replace("ago", "")
-                                        .replace("+", "")
-                                        .trim();
-
-                        // ==========================================
-                        // TODAY / HOURS / MINUTES
-                        // ==========================================
-
-                        if (posted.contains("today")
-                                        || posted.contains("just posted")
-                                        || posted.contains("hour")
-                                        || posted.contains("minute")) {
-
-                                jobsFound = true;
-
-                                return true;
-                        }
-
-                        // ==========================================
-                        // EXTRACT NUMBER
-                        // ==========================================
-
-                        Matcher matcher = NUMBER_PATTERN.matcher(posted);
-
-                        if (!matcher.find()) {
-
-                                return false;
-                        }
-
-                        int value = Integer.parseInt(
-                                        matcher.group());
-
-                        int currentLimit = DAY_LIMITS[currentLimitIndex];
-
-                        // ==========================================
-                        // DAYS
-                        // ==========================================
-
-                        if (posted.contains("day")) {
-
-                                if (value <= currentLimit) {
-
-                                        jobsFound = true;
-
-                                        return true;
-                                }
-
-                                return false;
-                        }
-
-                        // ==========================================
-                        // WEEKS
-                        // ==========================================
-
-                        if (posted.contains("week")) {
-
-                                int allowedWeeks = currentLimit / 7;
-
-                                if (value <= allowedWeeks) {
-
-                                        jobsFound = true;
-
-                                        return true;
-                                }
-
-                                return false;
-                        }
-
-                        // ==========================================
-                        // MONTHS
-                        // ONLY 1 MONTH
-                        // ==========================================
-
-                        if (posted.contains("month")) {
-
-                                if (value == 1
-                                                && currentLimit >= 28) {
-
-                                        jobsFound = true;
-
-                                        return true;
-                                }
-
-                                return false;
-                        }
-
-                } catch (Exception ignored) {
+                for (int i = 0; i <= m; i++) {
+                        dp[i][0] = i;
                 }
 
-                return false;
-        }
-
-        // ==========================================
-        // INCREASE RANGE
-        // ==========================================
-
-        public static void increaseDayLimitIfNeeded() {
-
-                // ==========================================
-                // STOP IF JOBS FOUND
-                // ==========================================
-
-                if (jobsFound) {
-
-                        System.out.println(
-
-                                        "Jobs found within "
-                                                        + getCurrentDayLimit()
-                                                        + " days.");
-
-                        return;
+                for (int j = 0; j <= n; j++) {
+                        dp[0][j] = j;
                 }
 
-                // ==========================================
-                // INCREASE LIMIT
-                // ==========================================
+                for (int i = 1; i <= m; i++) {
 
-                if (currentLimitIndex < DAY_LIMITS.length - 1) {
+                        for (int j = 1; j <= n; j++) {
 
-                        currentLimitIndex++;
+                                int cost = a.charAt(i - 1) == b.charAt(j - 1)
+                                                ? 0
+                                                : 1;
 
-                        System.out.println(
-
-                                        "No jobs found. Increasing range to "
-                                                        + getCurrentDayLimit()
-                                                        + " days.");
+                                dp[i][j] = Math.min(
+                                                Math.min(
+                                                                dp[i - 1][j] + 1,
+                                                                dp[i][j - 1] + 1),
+                                                dp[i - 1][j - 1] + cost);
+                        }
                 }
-        }
 
-        // ==========================================
-        // CURRENT LIMIT
-        // ==========================================
-
-        public static int getCurrentDayLimit() {
-
-                return DAY_LIMITS[currentLimitIndex];
-        }
-
-        // ==========================================
-        // RESET
-        // ==========================================
-
-        public static void resetDayLimit() {
-
-                currentLimitIndex = 0;
-
-                jobsFound = false;
-        }
-
-        // ==========================================
-        // JOB FOUND STATUS
-        // ==========================================
-
-        public static boolean hasJobsFound() {
-
-                return jobsFound;
+                return dp[m][n];
         }
 }

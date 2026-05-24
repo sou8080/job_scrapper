@@ -3,15 +3,10 @@ package models;
 public class PortalScrapeConfig {
 
     private final String jobCardSelector;
-
     private final String companySelector;
-
     private final String titleSelector;
-
     private final String locationSelector;
-
     private final String postedDateSelector;
-
     private final String applyLinkSelector;
 
     public PortalScrapeConfig(

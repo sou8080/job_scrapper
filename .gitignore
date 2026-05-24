@@ -56,3 +56,27 @@ output/jobs.csv
 # ==========================================
 .DS_Store
 Thumbs.db
+
+# ==========================================
+# Screenshots
+# ==========================================
+src/test/resources/Screenshots/**
+
+# ==========================================
+# Session / Auth Persistence
+# ==========================================
+auth/*.json
+sessions/
+storage/
+
+# ==========================================
+# Chrome / Browser Profiles
+# ==========================================
+chrome-profile/
+browser-profile/
+user-data/
+userdata/
+profile/
+profiles/
+chrome-data/
+playwright/.auth/

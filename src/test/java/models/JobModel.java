@@ -7,15 +7,10 @@ public class JobModel {
     // ==========================================
 
     private String company;
-
     private String role;
-
     private String portal;
-
     private String location;
-
     private String postedDate;
-
     private String applyLink;
 
     // ==========================================
@@ -25,27 +20,17 @@ public class JobModel {
     public JobModel(
 
             String company,
-
             String role,
-
             String portal,
-
             String location,
-
             String postedDate,
-
             String applyLink) {
 
         this.company = company;
-
         this.role = role;
-
         this.portal = portal;
-
         this.location = location;
-
         this.postedDate = postedDate;
-
         this.applyLink = applyLink;
     }
 
@@ -83,19 +68,9 @@ public class JobModel {
 
     public String getUniqueKey() {
 
-        String companyKey = company == null
-                ? ""
-                : company.trim()
-                        .toLowerCase();
-
-        String roleKey = role == null
-                ? ""
-                : role.trim()
-                        .toLowerCase();
-
-        return companyKey
-                + "_"
-                + roleKey;
+        String companyKey = company == null ? "" : company.trim().toLowerCase();
+        String roleKey = role == null ? "" : role.trim().toLowerCase();
+        return companyKey + "_" + roleKey;
     }
 
     // ==========================================
@@ -105,18 +80,7 @@ public class JobModel {
     @Override
     public String toString() {
 
-        return
-
-        "Company: " + company + "\n"
-
-                + "Role: " + role + "\n"
-
-                + "Portal: " + portal + "\n"
-
-                + "Location: " + location + "\n"
-
-                + "Posted: " + postedDate + "\n"
-
-                + "Job URL: " + applyLink + "\n";
+        return "Company: " + company + "\n" + "Role: " + role + "\n" + "Portal: " + portal + "\n" + "Location: "
+                + location + "\n" + "Posted: " + postedDate + "\n" + "Job URL: " + applyLink + "\n";
     }
 }

@@ -6,7 +6,6 @@ import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitUntilState;
 
 import config.PortalConfig;
-
 import utilities.JobPortal;
 import utilities.ScreenshotUtils;
 
@@ -14,8 +13,7 @@ public class Indeed_POM {
 
         private final Page page;
 
-        private final String INDEED_URL = PortalConfig.getUrl(
-                        JobPortal.INDEED);
+        private final String INDEED_URL = PortalConfig.getUrl(JobPortal.INDEED);
 
         private final String[] keywordSelectors = {
                         "input[name='q']",
@@ -55,28 +53,74 @@ public class Indeed_POM {
         };
 
         public Indeed_POM(Page page) {
-
                 this.page = page;
         }
 
         public void goToIndeed() {
+
                 try {
+
                         page.navigate(
                                         INDEED_URL,
                                         new Page.NavigateOptions()
                                                         .setWaitUntil(
                                                                         WaitUntilState.DOMCONTENTLOADED));
+
                         page.waitForLoadState(
                                         LoadState.DOMCONTENTLOADED);
+
                         waitMedium();
+
+                        String currentUrl = page.url().toLowerCase();
+
+                        System.out.println(
+                                        "Current URL : "
+                                                        + currentUrl);
+
+                        boolean invalidPage = currentUrl.contains("blocked")
+                                        || currentUrl.contains("captcha")
+                                        || currentUrl.contains("challenge")
+                                        || currentUrl.contains("login");
+
+                        if (invalidPage) {
+
+                                System.out.println(
+                                                "[INDEED] Blocked or challenge page detected.");
+
+                                ScreenshotUtils.captureScreenshot(
+                                                page,
+                                                JobPortal.INDEED,
+                                                "indeed_blocked.png");
+
+                                throw new RuntimeException(
+                                                "Indeed blocked.");
+                        }
+
+                        try {
+
+                                page.locator("body")
+                                                .click(
+                                                                new Locator.ClickOptions()
+                                                                                .setPosition(50, 50));
+
+                        } catch (Exception ignored) {
+                        }
+
                         System.out.println(
                                         "Indeed opened successfully.");
+
                 } catch (Exception e) {
+
                         ScreenshotUtils.captureScreenshot(
                                         page,
                                         JobPortal.INDEED,
                                         "indeed_open_failure.png");
-                        e.printStackTrace();
+
+                        System.out.println(
+                                        "[INDEED] Unable to open portal.");
+
+                        throw new RuntimeException(
+                                        "Failed to open Indeed.");
                 }
         }
 
@@ -90,34 +134,48 @@ public class Indeed_POM {
 
         private Locator findWorkingLocator(
                         String[] selectors) {
+
                 for (String selector : selectors) {
+
                         try {
+
                                 Locator locator = page.locator(selector)
                                                 .first();
+
                                 locator.waitFor(
                                                 new Locator.WaitForOptions()
                                                                 .setTimeout(3000));
+
                                 if (locator.count() > 0
                                                 && locator.isVisible()) {
+
                                         return locator;
                                 }
+
                         } catch (Exception ignored) {
                         }
                 }
+
                 throw new RuntimeException(
                                 "No working locator found.");
         }
 
         private String getWorkingJobCardSelector() {
+
                 for (String selector : jobCardSelectors) {
+
                         try {
+
                                 if (page.locator(selector)
                                                 .count() > 0) {
+
                                         return selector;
                                 }
+
                         } catch (Exception ignored) {
                         }
                 }
+
                 throw new RuntimeException(
                                 "No working job card selector found.");
         }
@@ -125,146 +183,181 @@ public class Indeed_POM {
         private void fillField(
                         Locator field,
                         String value) {
-                field.scrollIntoViewIfNeeded();
-                field.click();
-                waitShort();
-                field.fill("");
-                waitShort();
-                field.fill(value);
-                waitMedium();
+
+                try {
+
+                        field.scrollIntoViewIfNeeded();
+                        waitShort();
+
+                        field.click();
+                        waitShort();
+
+                        field.press("Control+A");
+                        field.press("Backspace");
+                        waitShort();
+
+                        field.pressSequentially(
+                                        value,
+                                        new Locator.PressSequentiallyOptions()
+                                                        .setDelay(80));
+
+                        waitShort();
+
+                } catch (Exception e) {
+
+                        System.out.println(
+                                        "[INDEED] Text entry failed.");
+                }
         }
 
         private void closeCookiePopup() {
+
                 try {
+
                         String[] cookieSelectors = {
                                         "button:has-text('Accept')",
                                         "button:has-text('Accept All')",
                                         "button:has-text('I Accept')",
                                         "#onetrust-accept-btn-handler"
                         };
+
                         for (String selector : cookieSelectors) {
+
                                 try {
+
                                         Locator cookieBtn = page.locator(selector)
                                                         .first();
+
                                         if (cookieBtn.count() > 0
                                                         && cookieBtn.isVisible()) {
+
                                                 cookieBtn.click();
+
                                                 waitShort();
+
                                                 return;
                                         }
+
                                 } catch (Exception ignored) {
                                 }
                         }
+
                 } catch (Exception ignored) {
                 }
-        }
-
-        private void handleCloudflareChallenge() {
-                int attempts = 3;
-                while (attempts > 0) {
-                        if (!page.title()
-                                        .contains("Just a moment")) {
-                                return;
-                        }
-                        page.waitForTimeout(10000);
-                        page.reload();
-                        page.waitForLoadState(
-                                        LoadState.DOMCONTENTLOADED);
-                        attempts--;
-                }
-                ScreenshotUtils.captureScreenshot(
-                                page,
-                                JobPortal.INDEED,
-                                "cloudflare_block.png");
-                throw new RuntimeException(
-                                "Cloudflare bot protection triggered.");
         }
 
         public void searchJobs(
                         String keyword,
                         String location) {
+
                 try {
+
                         page.waitForLoadState(
                                         LoadState.DOMCONTENTLOADED);
+
                         waitMedium();
+
                         closeCookiePopup();
+
                         Locator keywordField = findWorkingLocator(
                                         keywordSelectors);
-                        fillField(
-                                        keywordField,
-                                        keyword);
+
+                        fillField(keywordField, keyword);
+
                         System.out.println(
                                         "Keyword entered : "
                                                         + keyword);
+
                         Locator locationField = findWorkingLocator(
                                         locationSelectors);
-                        fillField(
-                                        locationField,
-                                        location);
+
+                        fillField(locationField, location);
+
                         ScreenshotUtils.captureScreenshot(
                                         page,
                                         JobPortal.INDEED,
                                         "indeed_location_filled.png");
+
                         System.out.println(
                                         "Location entered : "
                                                         + location);
+
                         try {
+
                                 Locator searchBtn = findWorkingLocator(
                                                 searchButtonSelectors);
+
                                 searchBtn.scrollIntoViewIfNeeded();
+
                                 waitShort();
+
                                 searchBtn.click();
-                                waitMedium();
+
                         } catch (Exception e) {
-                                ScreenshotUtils.captureScreenshot(
-                                                page,
-                                                JobPortal.INDEED,
-                                                "indeed_search_click_failure.png");
-                                keywordField.press(
-                                                "Enter");
+
+                                System.out.println(
+                                                "[INDEED] Search button failed.");
+
+                                keywordField.press("Enter");
                         }
+
                         page.waitForTimeout(8000);
-                        handleCloudflareChallenge();
+
                         String activeJobCardSelector = getWorkingJobCardSelector();
+
                         int totalJobs = page.locator(
                                         activeJobCardSelector)
                                         .count();
+
                         System.out.println(
                                         "Indeed jobs found : "
                                                         + totalJobs);
+
                         System.out.println(
                                         "Indeed job search completed.");
+
                 } catch (Exception e) {
+
                         ScreenshotUtils.captureScreenshot(
                                         page,
                                         JobPortal.INDEED,
                                         "indeed_search_failure.png");
 
-                        e.printStackTrace();
+                        System.out.println(
+                                        "[INDEED] Search failed.");
                 }
         }
 
         public boolean hasResults() {
+
                 try {
+
                         return page.locator(
                                         getWorkingJobCardSelector())
                                         .count() > 0;
+
                 } catch (Exception e) {
+
                         return false;
                 }
         }
 
         public int getJobCount() {
+
                 try {
+
                         return page.locator(
                                         getWorkingJobCardSelector())
                                         .count();
+
                 } catch (Exception e) {
+
                         return 0;
                 }
         }
 
         public Locator getJobCards() {
+
                 return page.locator(
                                 getWorkingJobCardSelector());
         }

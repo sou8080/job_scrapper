@@ -51,38 +51,113 @@ public class LinkedIn_POM {
 
         public void goToLinkedIn() {
 
-                try {
+                int attempts = 0;
 
-                        page.navigate(
-                                        LINKEDIN_URL);
+                int maxRetries = 5;
 
-                        page.waitForLoadState(
-                                        LoadState.DOMCONTENTLOADED);
-
-                        waitMedium();
+                while (attempts < maxRetries) {
 
                         try {
 
-                                page.locator("body")
-                                                .click(
-                                                                new Locator.ClickOptions()
-                                                                                .setPosition(50, 50));
+                                attempts++;
 
-                        } catch (Exception ignored) {
+                                page.navigate(LINKEDIN_URL);
+
+                                page.waitForLoadState(
+                                                LoadState.DOMCONTENTLOADED);
+                                waitMedium();
+
+                                String currentUrl = page.url().toLowerCase();
+
+                                System.out.println("Current URL : " + currentUrl);
+
+                                boolean invalidUrl = currentUrl.contains("authwall")
+                                                || currentUrl.contains("login")
+                                                || currentUrl.contains("checkpoint")
+                                                || !currentUrl.contains("/jobs");
+
+                                if (invalidUrl) {
+
+                                        System.out.println(
+                                                        "LinkedIn redirected to auth wall. Retry : "
+                                                                        + attempts);
+
+                                        ScreenshotUtils.captureScreenshot(
+                                                        page,
+                                                        JobPortal.LINKEDIN,
+                                                        "linkedin_authwall_retry_"
+                                                                        + attempts
+                                                                        + ".png");
+
+                                        try {
+                                                page.reload();
+                                                waitMedium();
+                                                currentUrl = page.url().toLowerCase();
+
+                                                System.out.println("Current URL : "
+                                                                + currentUrl);
+
+                                                if (!currentUrl.contains("authwall")
+                                                                && !currentUrl.contains("login")
+                                                                && !currentUrl.contains("checkpoint")
+                                                                && currentUrl.contains("/jobs")) {
+
+                                                        System.out.println(
+                                                                        "LinkedIn authwall removed after reload.");
+
+                                                        return;
+                                                }
+
+                                        } catch (Exception ignored) {
+                                        }
+
+                                        try {
+
+                                                page.navigate("about:blank");
+
+                                        } catch (Exception ignored) {
+                                        }
+
+                                        page.waitForTimeout(3000);
+
+                                        continue;
+                                }
+
+                                try {
+
+                                        page.locator("body").click(
+                                                        new Locator.ClickOptions()
+                                                                        .setPosition(
+                                                                                        50,
+                                                                                        50));
+
+                                } catch (Exception ignored) {
+                                }
+
+                                System.out.println(
+                                                "LinkedIn opened successfully.");
+
+                                return;
+
+                        } catch (Exception e) {
+
+                                ScreenshotUtils.captureScreenshot(
+                                                page,
+                                                JobPortal.LINKEDIN,
+                                                "linkedin_open_failure_"
+                                                                + attempts
+                                                                + ".png");
+
+                                e.printStackTrace();
+
+                                page.waitForTimeout(3000);
                         }
-
-                        System.out.println(
-                                        "LinkedIn opened successfully.");
-
-                } catch (Exception e) {
-
-                        ScreenshotUtils.captureScreenshot(
-                                        page,
-                                        JobPortal.LINKEDIN,
-                                        "linkedin_open_failure.png");
-
-                        e.printStackTrace();
                 }
+
+                throw new RuntimeException(
+                                "Failed to open LinkedIn jobs page after "
+                                                + maxRetries
+                                                + " retries");
         }
 
         private void waitShort() {
@@ -109,7 +184,8 @@ public class LinkedIn_POM {
                                                 new Locator.WaitForOptions()
                                                                 .setState(
                                                                                 WaitForSelectorState.VISIBLE)
-                                                                .setTimeout(5000));
+                                                                .setTimeout(
+                                                                                5000));
 
                                 if (locator.count() > 0
                                                 && locator.isVisible()) {
@@ -131,8 +207,7 @@ public class LinkedIn_POM {
 
                         try {
 
-                                if (page.locator(selector)
-                                                .count() > 0) {
+                                if (page.locator(selector).count() > 0) {
 
                                         return selector;
                                 }
@@ -226,8 +301,7 @@ public class LinkedIn_POM {
                                                 JobPortal.LINKEDIN,
                                                 "linkedin_search_click_failure.png");
 
-                                locationField.press(
-                                                "Enter");
+                                locationField.press("Enter");
                         }
 
                         page.waitForSelector(

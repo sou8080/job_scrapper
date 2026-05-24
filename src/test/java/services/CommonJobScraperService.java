@@ -13,20 +13,14 @@ public class CommonJobScraperService {
 
         public static void scrapeJobs(
 
+                        JobFilterService filterService,
                         Page page,
-
                         String portal,
-
                         String jobCardSelector,
-
                         String companySelector,
-
                         String roleSelector,
-
                         String locationSelector,
-
                         String postedSelector,
-
                         String linkSelector) {
 
                 Locator jobCards = page.locator(jobCardSelector);
@@ -34,10 +28,7 @@ public class CommonJobScraperService {
                 int count = jobCards.count();
 
                 System.out.println(
-
-                                portal
-                                                + " jobs found : "
-                                                + count);
+                                portal + " jobs found : " + count);
 
                 for (int i = 0; i < count; i++) {
 
@@ -46,7 +37,12 @@ public class CommonJobScraperService {
                                 Locator card = jobCards.nth(i);
 
                                 if (i == 0) {
-                                        System.out.println("DEBUG " + portal + " Card HTML: " + card.innerHTML());
+
+                                        System.out.println(
+                                                        "DEBUG "
+                                                                        + portal
+                                                                        + " Card HTML: "
+                                                                        + card.innerHTML());
                                 }
 
                                 // ==========================================
@@ -69,33 +65,110 @@ public class CommonJobScraperService {
                                                 card,
                                                 postedSelector);
 
+                                // ==========================================
+                                // TIMESJOBS DATE CLEANUP
+                                // ==========================================
+
+                                if (portal.equalsIgnoreCase(
+                                                "TimesJobs")) {
+
+                                        try {
+
+                                                java.util.regex.Matcher matcher = java.util.regex.Pattern
+                                                                .compile(
+                                                                                "(\\d{2}[-/]\\d{2}[-/]\\d{4})")
+                                                                .matcher(
+                                                                                posted);
+
+                                                if (matcher.find()) {
+
+                                                        posted = matcher.group(1)
+                                                                        .trim();
+
+                                                } else {
+
+                                                        posted = "N/A";
+                                                }
+
+                                        } catch (Exception ignored) {
+
+                                                posted = "N/A";
+                                        }
+                                }
+
                                 String jobUrl = fastAttribute(
                                                 card,
                                                 linkSelector,
                                                 "href");
 
-                                if (portal.equalsIgnoreCase("LinkedIn") && (jobUrl.equals("N/A") || jobUrl.isEmpty()
-                                                || jobUrl.startsWith("N/A"))) {
-                                        String compKey = card.getAttribute("componentkey");
-                                        if (compKey == null || compKey.equals("N/A")) {
-                                                Locator ckDiv = card.locator("div[componentkey]").first();
+                                // ==========================================
+                                // LINKEDIN URL FIX
+                                // ==========================================
+
+                                if (portal.equalsIgnoreCase(
+                                                "LinkedIn")
+                                                && (jobUrl.equals("N/A")
+                                                                || jobUrl.isEmpty()
+                                                                || jobUrl.startsWith(
+                                                                                "N/A"))) {
+
+                                        String compKey = card.getAttribute(
+                                                        "componentkey");
+
+                                        if (compKey == null
+                                                        || compKey.equals(
+                                                                        "N/A")) {
+
+                                                Locator ckDiv = card.locator(
+                                                                "div[componentkey]")
+                                                                .first();
+
                                                 if (ckDiv.count() > 0) {
-                                                        compKey = ckDiv.getAttribute("componentkey");
+
+                                                        compKey = ckDiv.getAttribute(
+                                                                        "componentkey");
                                                 }
                                         }
-                                        if (compKey != null && !compKey.isEmpty() && !compKey.equals("N/A")) {
-                                                java.util.regex.Pattern p = java.util.regex.Pattern.compile("\\d+");
-                                                java.util.regex.Matcher m = p.matcher(compKey);
+
+                                        if (compKey != null
+                                                        && !compKey.isEmpty()
+                                                        && !compKey.equals(
+                                                                        "N/A")) {
+
+                                                java.util.regex.Pattern p = java.util.regex.Pattern
+                                                                .compile(
+                                                                                "\\d+");
+
+                                                java.util.regex.Matcher m = p.matcher(
+                                                                compKey);
+
                                                 if (m.find()) {
-                                                        jobUrl = "https://www.linkedin.com/jobs/view/" + m.group();
+
+                                                        jobUrl = "https://www.linkedin.com/jobs/view/"
+                                                                        + m.group();
                                                 }
                                         }
                                 }
 
+                                // ==========================================
+                                // DEBUG
+                                // ==========================================
+
                                 if (i == 0) {
-                                        System.out.println("DEBUG " + portal + " Extracted - Company: " + company
-                                                        + ", Role: " + role + ", Location: " + location + ", Posted: "
-                                                        + posted + ", Link: " + jobUrl);
+
+                                        System.out.println(
+                                                        "DEBUG "
+                                                                        + portal
+                                                                        + " Extracted - Company: "
+                                                                        + company
+                                                                        + ", Role: "
+                                                                        + role
+                                                                        + ", Location: "
+                                                                        + location
+                                                                        + ", Posted: "
+                                                                        + posted
+                                                                        + ", Link: "
+                                                                        + jobUrl);
                                 }
 
                                 // ==========================================
@@ -113,35 +186,33 @@ public class CommonJobScraperService {
                                 // FILTER
                                 // ==========================================
 
-                                if (JobFilterService.isRelevant(role)
-
-                                                &&
-
-                                                JobFilterService.isRecent(posted)) {
+                                if (filterService.isRelevant(role)
+                                                && filterService.isRecent(
+                                                                posted)) {
 
                                         JobModel job = new JobModel(
-
                                                         company,
-
                                                         role,
-
                                                         portal,
-
                                                         location,
-
                                                         posted,
-
                                                         jobUrl);
 
-                                        JobCollectorService.addJob(job);
+                                        JobCollectorService.addJob(
+                                                        job);
+
+                                        System.out.println(
+                                                        "Job added : "
+                                                                        + role);
                                 }
 
                         } catch (Exception e) {
 
                                 System.out.println(
-
                                                 "Failed to scrape one job from : "
                                                                 + portal);
+
+                                e.printStackTrace();
                         }
                 }
         }
@@ -156,7 +227,9 @@ public class CommonJobScraperService {
 
                 try {
 
-                        if (selector == null || selector.trim().isEmpty()) {
+                        if (selector == null
+                                        || selector.trim().isEmpty()) {
+
                                 return "N/A";
                         }
 
@@ -164,12 +237,11 @@ public class CommonJobScraperService {
 
                         if (loc.count() > 0) {
 
-                                String value = loc.first().textContent();
+                                String value = loc.first()
+                                                .textContent();
 
                                 return value != null
-
                                                 ? value.trim()
-
                                                 : "N/A";
                         }
 
@@ -192,7 +264,9 @@ public class CommonJobScraperService {
 
                 try {
 
-                        if (selector == null || selector.trim().isEmpty()) {
+                        if (selector == null
+                                        || selector.trim().isEmpty()) {
+
                                 return "N/A";
                         }
 
@@ -200,12 +274,12 @@ public class CommonJobScraperService {
 
                         if (loc.count() > 0) {
 
-                                String value = loc.first().getAttribute(attribute);
+                                String value = loc.first()
+                                                .getAttribute(
+                                                                attribute);
 
                                 return value != null
-
                                                 ? value.trim()
-
                                                 : "N/A";
                         }
 

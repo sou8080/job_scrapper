@@ -10,24 +10,15 @@ public class ConfigLoader {
 
     static {
 
-        try (InputStream input = ConfigLoader.class
-                .getClassLoader()
-                .getResourceAsStream(
-                        "config.properties")) {
+        try (InputStream input = ConfigLoader.class.getClassLoader().getResourceAsStream("config.properties")) {
 
             if (input == null) {
-
-                throw new RuntimeException(
-                        "config.properties not found");
+                throw new RuntimeException("config.properties not found");
             }
-
             PROPERTIES.load(input);
 
         } catch (IOException e) {
-
-            throw new RuntimeException(
-                    "Failed to load config.properties",
-                    e);
+            throw new RuntimeException("Failed to load config.properties", e);
         }
     }
 
@@ -35,31 +26,43 @@ public class ConfigLoader {
     // GET STRING
     // ==========================================
 
-    public static String get(
-            String key) {
+    public static String get(String key) {
 
         return PROPERTIES.getProperty(key);
+    }
+
+    public static String getOrDefault(String key, String defaultValue) {
+        String val = get(key);
+        return (val == null || val.trim().isEmpty()) ? defaultValue : val.trim();
     }
 
     // ==========================================
     // GET BOOLEAN
     // ==========================================
 
-    public static boolean getBoolean(
-            String key) {
+    public static boolean getBoolean(String key) {
+        return Boolean.parseBoolean(get(key));
+    }
 
-        return Boolean.parseBoolean(
-                get(key));
+    public static boolean getBooleanOrDefault(String key, boolean defaultValue) {
+        String val = get(key);
+        return (val == null || val.trim().isEmpty()) ? defaultValue : Boolean.parseBoolean(val.trim());
     }
 
     // ==========================================
     // GET INT
     // ==========================================
 
-    public static int getInt(
-            String key) {
+    public static int getInt(String key) {
+        return Integer.parseInt(get(key));
+    }
 
-        return Integer.parseInt(
-                get(key));
+    public static int getIntOrDefault(String key, int defaultValue) {
+        String val = get(key);
+        try {
+            return (val == null || val.trim().isEmpty()) ? defaultValue : Integer.parseInt(val.trim());
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
     }
 }

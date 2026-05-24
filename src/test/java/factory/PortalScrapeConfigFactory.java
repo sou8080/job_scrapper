@@ -16,43 +16,9 @@ public class PortalScrapeConfigFactory {
 
             case LINKEDIN:
 
-                return new PortalScrapeConfig(
-
-                        // ==========================================
-                        // JOB CARD
-                        // ==========================================
-
-                        ".base-card.job-search-card",
-
-                        // ==========================================
-                        // COMPANY
-                        // ==========================================
-
-                        ".base-search-card__subtitle",
-
-                        // ==========================================
-                        // TITLE
-                        // ==========================================
-
-                        ".base-search-card__title",
-
-                        // ==========================================
-                        // LOCATION
-                        // ==========================================
-
-                        ".job-search-card__location",
-
-                        // ==========================================
-                        // POSTED DATE
-                        // ==========================================
-
-                        ".job-search-card__listdate, .job-search-card__listdate--new",
-
-                        // ==========================================
-                        // APPLY LINK
-                        // ==========================================
-
-                        "a.base-card__full-link");
+                return new PortalScrapeConfig(".base-card.job-search-card", ".base-search-card__subtitle",
+                        ".base-search-card__title", ".job-search-card__location",
+                        ".job-search-card__listdate, .job-search-card__listdate--new", "a.base-card__full-link");
 
             // ==========================================
             // NAUKRI
@@ -60,25 +26,8 @@ public class PortalScrapeConfigFactory {
 
             case NAUKRI:
 
-                return new PortalScrapeConfig(
-
-                        // JOB CARD
-                        ".srp-jobtuple-wrapper",
-
-                        // COMPANY
-                        ".comp-name",
-
-                        // TITLE
-                        ".title",
-
-                        // LOCATION
-                        ".locWdth",
-
-                        // POSTED DATE
-                        ".job-post-day",
-
-                        // APPLY LINK
-                        "a");
+                return new PortalScrapeConfig(".srp-jobtuple-wrapper", ".comp-name", ".title", ".locWdth",
+                        ".job-post-day", "a");
 
             // ==========================================
             // INDEED
@@ -86,24 +35,11 @@ public class PortalScrapeConfigFactory {
 
             case INDEED:
 
-                return new PortalScrapeConfig(
-
-                        // JOB CARD
-                        ".job_seen_beacon, .result",
-
-                        // COMPANY
+                return new PortalScrapeConfig(".job_seen_beacon, .result",
                         "[data-testid='company-name'], .companyName, .company_name",
-
-                        // TITLE
                         "h2.jobTitle a span, h2.jobTitle span:not([class*='accessibility']), .jcs-JobTitle, a.jcs-JobTitle",
-
-                        // LOCATION
                         "[data-testid='text-location'], .companyLocation, .location",
-
-                        // POSTED DATE
                         "[class*='date']:not(a), .result-footer .date, [data-testid*='date'], span[id*='date']",
-
-                        // APPLY LINK
                         "h2.jobTitle a, a.jcs-JobTitle, a[data-jk]");
 
             // ==========================================
@@ -112,19 +48,10 @@ public class PortalScrapeConfigFactory {
 
             case SHINE:
 
-                return new PortalScrapeConfig(
-
-                        ".jobCardNova_bigCard__W2xn3",
-
-                        ".jobCardNova_bigCardTopTitleName__M_W_m",
-
+                return new PortalScrapeConfig(".jobCardNova_bigCard__W2xn3", ".jobCardNova_bigCardTopTitleName__M_W_m",
                         "h3.jobCardNova_bigCardTopTitleHeading__Rj2sC a",
-
                         ".jobCardNova_bigCardCenterListLoc__usiPB span",
-
-                        ".jobCardNova_postedData__LTERc",
-
-                        "h3.jobCardNova_bigCardTopTitleHeading__Rj2sC a");
+                        ".jobCardNova_postedData__LTERc", "h3.jobCardNova_bigCardTopTitleHeading__Rj2sC a");
 
             // ==========================================
             // FOUNDIT
@@ -132,25 +59,76 @@ public class PortalScrapeConfigFactory {
 
             case FOUNDIT:
 
+                return new PortalScrapeConfig(".cardContainer", ".companyName p", ".jobTitle", ".details.location",
+                        ".jobAddedTime .timeText", ".jobTitle");
+
+            // ==========================================
+            // TIMESJOBS
+            // ==========================================
+
+            case TIMESJOBS:
+
                 return new PortalScrapeConfig(
 
+                        // ==========================================
                         // JOB CARD
-                        ".cardContainer",
+                        // ==========================================
 
+                        ".srp-card, div[class*='srp-card'], div.rounded-xl.mb-4.shadow-sm.relative",
+
+                        // ==========================================
                         // COMPANY
-                        ".companyName p",
+                        // ==========================================
 
-                        // TITLE
-                        ".jobTitle",
+                        "div.text-xs.text-gray-400.flex.items-center span:first-child, "
+                                +
+                                "div[class*='text-gray-400'] span:first-child, "
+                                +
+                                ".company-name, "
+                                +
+                                "span[title]",
 
+                        // ==========================================
+                        // ROLE
+                        // ==========================================
+
+                        "h2, "
+                                +
+                                "h2[class*='font-bold'], "
+                                +
+                                "h2.text-sm, "
+                                +
+                                "h2.text-base",
+
+                        // ==========================================
                         // LOCATION
-                        ".details.location",
+                        // ==========================================
 
+                        "span.font-semibold:has(i.locations-icon), "
+                                +
+                                "span[class*='font-semibold']",
+
+                        // ==========================================
                         // POSTED DATE
-                        ".jobAddedTime .timeText",
+                        // ==========================================
 
+                        "div.text-xs.text-gray-400.flex.items-center, "
+                                +
+                                "div[class*='text-gray-400'][class*='items-center'], "
+                                +
+                                "div[class*='posted'], "
+                                +
+                                "span[class*='posted']",
+
+                        // ==========================================
                         // APPLY LINK
-                        ".jobTitle");
+                        // ==========================================
+
+                        "a.absolute.left-0.right-0.top-0.bottom-0.z-20, "
+                                +
+                                "a[href*='job-detail'], "
+                                +
+                                "a[target='_blank']");
 
             // ==========================================
             // DEFAULT
@@ -158,9 +136,7 @@ public class PortalScrapeConfigFactory {
 
             default:
 
-                throw new RuntimeException(
-                        "Unsupported portal : "
-                                + portal);
+                throw new RuntimeException("Unsupported portal : " + portal);
         }
     }
 }

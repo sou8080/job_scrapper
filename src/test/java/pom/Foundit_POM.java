@@ -59,54 +59,33 @@ public class Foundit_POM {
         public void goToFoundit() {
 
                 try {
-                        page.navigate(
-                                        FOUNDIT_URL,
-                                        new Page.NavigateOptions()
-                                                        .setWaitUntil(
-                                                                        WaitUntilState.DOMCONTENTLOADED));
-
-                        page.waitForLoadState(
-                                        LoadState.DOMCONTENTLOADED);
-
+                        page.navigate(FOUNDIT_URL,
+                                        new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
+                        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
                         page.waitForTimeout(5000);
 
-                        System.out.println(
-                                        "Foundit opened successfully.");
+                        System.out.println("Foundit opened successfully.");
 
                 } catch (Exception e) {
+                        System.out.println("Failed to open Foundit.");
 
-                        System.out.println(
-                                        "Failed to open Foundit.");
-
-                        ScreenshotUtils.captureScreenshot(
-                                        page,
-                                        JobPortal.FOUNDIT,
-                                        "foundit_open_failure.png");
-
+                        ScreenshotUtils.captureScreenshot(page, JobPortal.FOUNDIT, "foundit_open_failure.png");
                         e.printStackTrace();
                 }
         }
 
-        private Locator findWorkingLocator(
-                        String[] selectors) {
-
+        private Locator findWorkingLocator(String[] selectors) {
                 for (String selector : selectors) {
-
                         try {
-                                Locator locator = page.locator(selector)
-                                                .first();
-                                locator.waitFor(
-                                                new Locator.WaitForOptions()
-                                                                .setTimeout(3000));
-                                if (locator.count() > 0
-                                                && locator.isVisible()) {
+                                Locator locator = page.locator(selector).first();
+                                locator.waitFor(new Locator.WaitForOptions().setTimeout(3000));
+                                if (locator.count() > 0 && locator.isVisible()) {
                                         return locator;
                                 }
                         } catch (Exception ignored) {
                         }
                 }
-                throw new RuntimeException(
-                                "No working locator found.");
+                throw new RuntimeException("No working locator found.");
         }
 
         private String getWorkingJobCardSelector() {
@@ -120,12 +99,10 @@ public class Foundit_POM {
                         } catch (Exception ignored) {
                         }
                 }
-                throw new RuntimeException(
-                                "No working job card selector found.");
+                throw new RuntimeException("No working job card selector found.");
         }
 
-        public void searchJobs(
-                        String keyword,
+        public void searchJobs(String keyword,
                         String location) {
 
                 try {
@@ -142,12 +119,9 @@ public class Foundit_POM {
                         page.waitForTimeout(1000);
                         keywordField.fill(keyword);
                         page.waitForTimeout(1500);
-                        System.out.println(
-                                        "Keyword entered : "
-                                                        + keyword);
+                        System.out.println("Keyword entered : " + keyword);
 
-                        Locator locationField = findWorkingLocator(
-                                        locationSelectors);
+                        Locator locationField = findWorkingLocator(locationSelectors);
 
                         locationField.scrollIntoViewIfNeeded();
                         locationField.click();
@@ -158,49 +132,29 @@ public class Foundit_POM {
                         page.waitForTimeout(1000);
                         locationField.fill(location);
                         page.waitForTimeout(1500);
-                        ScreenshotUtils.captureScreenshot(
-                                        page,
-                                        JobPortal.FOUNDIT,
-                                        "foundit_location_filled.png");
-                        System.out.println(
-                                        "Location entered : "
-                                                        + location);
+                        ScreenshotUtils.captureScreenshot(page, JobPortal.FOUNDIT, "foundit_location_filled.png");
+                        System.out.println("Location entered : " + location);
                         try {
-                                Locator searchBtn = findWorkingLocator(
-                                                searchButtonSelectors);
+                                Locator searchBtn = findWorkingLocator(searchButtonSelectors);
                                 searchBtn.scrollIntoViewIfNeeded();
                                 page.waitForTimeout(1000);
                                 searchBtn.click();
                                 page.waitForTimeout(3000);
-                                System.out.println(
-                                                "Search button clicked.");
+                                System.out.println("Search button clicked.");
                         } catch (Exception e) {
-                                ScreenshotUtils.captureScreenshot(
-                                                page,
-                                                JobPortal.FOUNDIT,
+                                ScreenshotUtils.captureScreenshot(page, JobPortal.FOUNDIT,
                                                 "foundit_search_click_failure.png");
-                                System.out.println(
-                                                "Search button failed. Using ENTER fallback.");
-                                keywordField.press(
-                                                "Enter");
+                                System.out.println("Search button failed. Using ENTER fallback.");
+                                keywordField.press("Enter");
                         }
                         page.waitForTimeout(8000);
                         String activeJobCardSelector = getWorkingJobCardSelector();
-                        int totalJobs = page.locator(
-                                        activeJobCardSelector)
-                                        .count();
-                        System.out.println(
-                                        "Foundit jobs found : "
-                                                        + totalJobs);
-                        System.out.println(
-                                        "Foundit job search completed.");
+                        int totalJobs = page.locator(activeJobCardSelector).count();
+                        System.out.println("Foundit jobs found : " + totalJobs);
+                        System.out.println("Foundit job search completed.");
                 } catch (Exception e) {
-                        System.out.println(
-                                        "Foundit job search failed.");
-                        ScreenshotUtils.captureScreenshot(
-                                        page,
-                                        JobPortal.FOUNDIT,
-                                        "foundit_search_failure.png");
+                        System.out.println("Foundit job search failed.");
+                        ScreenshotUtils.captureScreenshot(page, JobPortal.FOUNDIT, "foundit_search_failure.png");
                         e.printStackTrace();
                 }
         }
@@ -208,8 +162,7 @@ public class Foundit_POM {
         public boolean hasResults() {
                 try {
                         String selector = getWorkingJobCardSelector();
-                        return page.locator(selector)
-                                        .count() > 0;
+                        return page.locator(selector).count() > 0;
                 } catch (Exception e) {
                         return false;
                 }
@@ -218,8 +171,7 @@ public class Foundit_POM {
         public int getJobCount() {
                 try {
                         String selector = getWorkingJobCardSelector();
-                        return page.locator(selector)
-                                        .count();
+                        return page.locator(selector).count();
                 } catch (Exception e) {
                         return 0;
                 }

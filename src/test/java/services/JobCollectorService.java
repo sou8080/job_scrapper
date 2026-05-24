@@ -19,8 +19,7 @@ public class JobCollectorService {
     // ADD JOB
     // ==========================================
 
-    public static void addJob(
-            JobModel job) {
+    public static void addJob(JobModel job) {
 
         String uniqueKey = job.getUniqueKey();
 
@@ -28,26 +27,11 @@ public class JobCollectorService {
         // DUPLICATE CHECK
         // ==========================================
 
-        if (!JOBS_MAP.containsKey(
-                uniqueKey)) {
-
-            JOBS_MAP.put(
-                    uniqueKey,
-                    job);
-
-            System.out.println(
-                    "Added new job : "
-                            + job.getCompany()
-                            + " - "
-                            + job.getRole());
-
+        if (!JOBS_MAP.containsKey(uniqueKey)) {
+            JOBS_MAP.put(uniqueKey, job);
+            System.out.println("Added new job : " + job.getCompany() + " - " + job.getRole());
         } else {
-
-            System.out.println(
-                    "Duplicate skipped : "
-                            + job.getCompany()
-                            + " - "
-                            + job.getRole());
+            System.out.println("Duplicate skipped : " + job.getCompany() + " - " + job.getRole());
         }
     }
 
@@ -57,8 +41,7 @@ public class JobCollectorService {
 
     public static List<JobModel> getAllJobs() {
 
-        return new ArrayList<>(
-                JOBS_MAP.values());
+        return new ArrayList<>(JOBS_MAP.values());
     }
 
     // ==========================================
