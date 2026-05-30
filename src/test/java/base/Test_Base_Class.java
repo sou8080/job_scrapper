@@ -150,13 +150,13 @@ public class Test_Base_Class {
                         System.out.println("[SUITE] Scrape finished. Storing results...");
                         JobFileStoreService.saveJobs(JobCollectorService.getAllJobs());
 
-                        String reportPath = "output/latest_jobs.txt";
+                        String reportPath = "output/latest_jobs.xlsx";
                         File reportFile = new File(reportPath);
                         int totalJobs = JobCollectorService.getTotalJobs();
 
                         TelegramNotifier.sendMessage("🎉 Job Scraper Execution Completed\n\n"
                                         + "📊 Total Unique Jobs Stored : " + totalJobs + "\n\n"
-                                        + "📎 latest_jobs.txt attached");
+                                        + "📎 latest_jobs.xlsx attached");
 
                         if (reportFile.exists()) {
                                 TelegramNotifier.sendDocument(reportPath);
